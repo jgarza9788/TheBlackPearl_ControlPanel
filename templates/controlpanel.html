@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<div class="grid-main">
+  <div class="head text-white text-center fs-1">
+    <i class="fas fa-skull-crossbones"></i>
+    TBP Control Panel
+  </div>
+  <div class="spacer mb-auto"></div>    
+
+
+  <a class="R11 fs-5 rounded-6 shadow-5-strong btn btn-primary"  href="{{ url_for('activateVPN') }}" style="background-color: #1B5E20;">
+    <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+    <i class="fas fa-shield"></i>
+    <div class="space"></div>
+    re-VPN
+    </div>
+  </a>
+
+  <a class="R12 fs-5 rounded-6 shadow-5-strong btn btn-primary"  href="{{ url_for('killVPN') }}" style="background-color: #F44336;">
+    <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+    <i class="fas fa-skull"></i>
+    <div class="space"></div>
+    kill-VPN
+    </div>
+  </a>
+
+  <a class="R2 fs-5 rounded-6 shadow-5-strong btn btn-primary"  href="{{ url_for('getVPNstatus') }}" style="background-color: #2962FF;">
+    <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+    <i class="fas fa-rotate"></i>
+    <div class="space"></div>
+    VPN : {{vpn_status}}
+    </div>
+  </a>
+</div>
+
+
+{% endblock %}

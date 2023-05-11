@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<div class="grid-home">
+  <div class="head text-white text-center fs-1">
+    <i class="fas fa-skull-crossbones"></i>
+    TBP Control Panel
+  </div>
+  <div class="spacer mb-auto"></div>  
+  <a class="R2 fs-5 rounded-6 shadow-5-strong  btn btn-secondary" href="{{ url_for('register') }}" >
+    <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+    <i class="fas fa-square-plus"></i>
+    <div class="space"></div>
+    Register
+  </div>
+  </a>
+  <a class="R2 fs-5 rounded-6 shadow-5-strong btn btn-primary"  href="{{ url_for('login') }}" >
+    <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+    <i class="fas fa-circle-user"></i>
+    <div class="space"></div>
+    Login
+    </div>
+  </a>
+</div>
+
+
+{% endblock %}
