@@ -191,19 +191,12 @@ def getVPNstatus():
         )
 
 
-    
+
 
 if __name__ == "__main__":
-
-#     # prep work
-#     from util.github_scrapper import get_github
-#     ggh = get_github(repo_link="https://github.com/stars/jgarza9788/lists/portfolio",visible=False)
-#     ggh.scrape()
-#     from util.portfolio import process_portfolio
-#     process_portfolio()
-
     # app.run(debug=True, host= '192.168.1.254', port="8800")
     # app.run(debug=True,port="8800")
     # app.run(host='0.0.0.0',port=5000)
     # app.run(host='192.168.1.200',port="8800")
-    app.run(host='192.168.1.200',port="8800")
+    # app.run(host='192.168.1.200',port="8800")
+    app.run(debug=False,host='0.0.0.0',port="8800")
