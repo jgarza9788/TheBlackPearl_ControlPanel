@@ -168,7 +168,6 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-
 @app.route('/activateVPN')
 @login_required
 def activateVPN():
