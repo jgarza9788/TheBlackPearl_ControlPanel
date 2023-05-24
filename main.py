@@ -60,8 +60,8 @@ def VPN_Text(vpnbool:bool) -> str:
         return 'Is Off'
 
 
-
 ############################################
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -79,48 +79,59 @@ with app.app_context():
     db.create_all()
 
 
+############################################
+
+
+
+############################################
+
 @app.route('/')
 def home():
     if current_user.is_authenticated:
-        return render_template(
-            "controlpanel.html", 
-            name=current_user.name, 
-            logged_in=True,
-            vpn_status=VPN_Text(VPN_ON)
-            )
-    return render_template("index.html", logged_in=current_user.is_authenticated)
+        return redirect(url_for('controlpanel'))
+    else:
+        return redirect(url_for('login'))
+
+    # if current_user.is_authenticated:
+    #     return render_template(
+    #         "controlpanel.html", 
+    #         name=current_user.name, 
+    #         logged_in=True,
+    #         vpn_status=VPN_Text(VPN_ON)
+    #         )
+    # return render_template("index.html", logged_in=current_user.is_authenticated)
 
 
-@app.route('/register', methods=["GET", "POST"])
-def register():
-    if request.method == "POST":
+# @app.route('/register', methods=["GET", "POST"])
+# def register():
+#     if request.method == "POST":
 
-        if User.query.filter_by(email=request.form.get('email')).first():
-            #User already exists
-            flash("You've already signed up with that email, log in instead!")
-            return redirect(url_for('login'))
+#         if User.query.filter_by(email=request.form.get('email')).first():
+#             #User already exists
+#             flash("You've already signed up with that email, log in instead!")
+#             return redirect(url_for('login'))
 
-        hash_and_salted_password = generate_password_hash(
-            request.form.get('password'),
-            method='pbkdf2:sha256',
-            salt_length=8
-        )
-        new_user = User(
-            email=request.form.get('email'),
-            name=request.form.get('name'),
-            password=hash_and_salted_password,
-        )
-        db.session.add(new_user)
-        db.session.commit()
-        login_user(new_user)
-        # return redirect(url_for('secrets'))
-        return redirect(url_for('index'))
+#         hash_and_salted_password = generate_password_hash(
+#             request.form.get('password'),
+#             method='pbkdf2:sha256',
+#             salt_length=8
+#         )
+#         new_user = User(
+#             email=request.form.get('email'),
+#             name=request.form.get('name'),
+#             password=hash_and_salted_password,
+#         )
+#         db.session.add(new_user)
+#         db.session.commit()
+#         login_user(new_user)
+#         return redirect(url_for('index'))
 
-    return render_template("register.html", logged_in=current_user.is_authenticated)
+#     return render_template("register.html", logged_in=current_user.is_authenticated)
 
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
+
     if request.method == "POST":
         email = request.form.get('email')
         password = request.form.get('password')
@@ -148,9 +159,8 @@ def controlpanel():
         "controlpanel.html", 
         name=current_user.name, 
         logged_in=True,
-        vpn_status=VPN_Text(VPN_ON)
+        VPN_ON=VPN_ON
         )
-
 
 @app.route('/logout')
 @login_required
@@ -168,7 +178,7 @@ def activateVPN():
         "controlpanel.html", 
         name=current_user.name, 
         logged_in=True,
-        vpn_status=VPN_Text(VPN_ON)
+        VPN_ON=VPN_ON
         )
 
 @app.route('/killVPN')
@@ -180,7 +190,7 @@ def killVPN():
         "controlpanel.html", 
         name=current_user.name, 
         logged_in=True,
-        vpn_status=VPN_Text(VPN_ON)
+        VPN_ON=VPN_ON
         )
 
 @app.route('/getVPNstatus')
@@ -192,7 +202,7 @@ def getVPNstatus():
         "controlpanel.html", 
         name=current_user.name, 
         logged_in=True,
-        vpn_status=VPN_Text(VPN_ON)
+        VPN_ON=VPN_ON
         )
 
 
@@ -203,4 +213,10 @@ if __name__ == "__main__":
     # app.run(debug=True,port="8800")
     # app.run(host='0.0.0.0',port=5000)
     # app.run(host='192.168.1.200',port="8800")
-    app.run(host='192.168.1.200',port="8800")
+    # app.run(host='192.168.1.200',port="8800")
+    # app.run(debug=False,host='0.0.0.0',port="8800")
+    # app.run(host='0.0.0.0',port="8800",debug=False)
+    # app.run(host='192.168.1.223',port="5000")
+    # app.run(host='0.0.0.0',port="5000",debug=True)
+    app.run(host='192.168.1.200',port="8800",debug=False)
+    # app.run()
