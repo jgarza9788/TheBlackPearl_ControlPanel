@@ -2,6 +2,9 @@ from flask import Flask, render_template, request, url_for, redirect, flash, sen
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
+
+# from flask_ngrok import run_with_ngrok
+
 import time
 
 import Config
@@ -11,6 +14,8 @@ import os
 DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
+
+# run_with_ngrok(app)
 
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + DIR + '/instance/users.db'
@@ -191,19 +196,16 @@ def getVPNstatus():
         )
 
 
-    
+
 
 if __name__ == "__main__":
-
-#     # prep work
-#     from util.github_scrapper import get_github
-#     ggh = get_github(repo_link="https://github.com/stars/jgarza9788/lists/portfolio",visible=False)
-#     ggh.scrape()
-#     from util.portfolio import process_portfolio
-#     process_portfolio()
-
     # app.run(debug=True, host= '192.168.1.254', port="8800")
     # app.run(debug=True,port="8800")
     # app.run(host='0.0.0.0',port=5000)
     # app.run(host='192.168.1.200',port="8800")
-    app.run(host='192.168.1.200',port="8800")
+    # app.run(debug=False,host='0.0.0.0',port="8800")
+    # app.run(host='0.0.0.0',port="8800",debug=False)
+    # app.run(host='192.168.1.223',port="5000")
+    app.run(host='0.0.0.0',port="5000",debug=True)
+    # app.run(host='192.168.1.200',port="8800",debug=False)
+    # app.run()

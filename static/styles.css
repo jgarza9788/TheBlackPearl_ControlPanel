@@ -2,20 +2,35 @@
 body{
 	width: 100vw;
 	height: 100vh;
-	padding-top: 1em;
-	padding-bottom: 6em;
+	padding-top: 0rem;
+	padding-bottom: 6rem;
+}
+
+.grid{
+	width: 100%;
+	height: 100%;
+	gap: 1rem;
+	padding: 1rem;
+	display: grid;
+	grid-template-rows: repeat(0.1rem);
+	/* grid-template-columns: 1fr; */
+}
+
+.gridrow{
+	width: 100%;
+	height: 100%;
+	gap: 1rem;
+	padding: 1rem;
+	display: grid;
+	grid-template-columns: repeat(1fr);
 }
 
 .grid-main{
 	width: 100%;
 	height: 100%;
 	
-	gap: 1em;
-	padding: 1em;
-	/* padding-top: 1em; */
-	/* padding-bottom: 6em; */
-	/* margin-top: 6em; */
-	/* margin-bottom: 6em; */
+	gap: 1rem;
+	padding: 1rem;
 	display: grid;
 	grid-template-areas: 
 "head  head"
@@ -23,7 +38,7 @@ body{
 "R11  R12"
 "R2  R2"
 ;
-	grid-template-rows: 6em 1fr 6em 6em;
+	grid-template-rows: 6em 1fr 6em 6rem;
 	grid-template-columns: 1fr 1fr;
 }
 
@@ -51,18 +66,18 @@ body{
 .grid-home{
 	width: 100%;
 	height: 100%;
-	gap: 1em;
-	padding: 1em;
+	gap: 1rem;
+	padding: 1rem;
 	display: grid;
-	grid-template-rows: 6em 1fr 6em 6em;
+	grid-template-rows: 6em 1fr 6em 6rem;
 	/* grid-template-columns: 1fr; */
 }
 
 .grid-login{
 	width: 100%;
 	height: 100%;
-	gap: 1em;
-	padding: 1em;
+	gap: 1rem;
+	padding: 1rem;
 	display: grid;
 	grid-template-rows: 6em 1fr 1fr;
 	/* grid-template-columns: 1fr; */
@@ -71,19 +86,19 @@ body{
 .grid-form{
 	width: 100%;
 	height: 100%;
-	gap: 1em;
-	padding: 1em;
+	gap: 1rem;
+	padding: 0rem;
 	display: grid;
-	grid-template-rows: 3em 3em 6em;
+	grid-template-rows: 3em 3em 6rem;
 }
 
 .grid-reg-form{
 	width: 100%;
 	height: 100%;
-	gap: 1em;
-	padding: 1em;
+	gap: 1rem;
+	padding: 1rem;
 	display: grid;
-	grid-template-rows: 3em 3em 3em 6em;
+	grid-template-rows: 3em 3em 3em 6rem;
 }
 
 

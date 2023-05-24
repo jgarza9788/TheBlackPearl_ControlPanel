@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+/ngrok_setup.cmd
 
 # C extensions
 *.so
