@@ -3,22 +3,34 @@
 
 
 <div class="grid">
-  <div class="head text-white text-center fs-1">
+  <!-- <div class="head text-white text-center fs-1">
     <i class="fas fa-skull-crossbones"></i>
     \ CP
-  </div>
-  <!-- <div class="spacer mb-auto"></div>     -->
+  </div> -->
 
-  <!-- <div class="row_4"> -->
-  <a class="fs-5 rounded-6 shadow-0-strong btn btn-dark"  href="{{ url_for('logout') }}">
+  <!-- <a class="fs-5 rounded-6 shadow-0-strong btn btn-dark"  href="{{ url_for('logout') }}">
     <div class="w-100 h-100 d-flex align-items-center justify-content-center">
-      <!-- <i class="fas fa-arrow-left-long"></i> -->
       <i class="fas fa-xmark"></i>
       <div class="space"></div>
       Logout
     </div>
-  </a>
-  <!-- </div> -->
+  </a> -->
+
+  <div class="row_2">
+    <a class="fs-5 rounded-6 shadow-0-strong btn btn-dark"  href="{{ url_for('logout') }}">
+      <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+        <i class="fas fa-xmark"></i>
+        <div class="space"></div>
+        Logout
+      </div>
+    </a>
+    <div class="head text-white text-center fs-5">
+      <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+      <i class="fas fa-skull-crossbones"></i>
+      \ CP
+      </div>
+    </div>
+  </div>
 
 
   <a class="fs-5 rounded-6 shadow-5-strong btn btn-primary"  href="{{ url_for('MOVIES') }}">
@@ -57,7 +69,15 @@
     </div>
   </a>
 
+  <!-- 
+  <button type="button" class="fixed-action-btn">
+    <i class="fas fa-gem"></i>
+  </button> 
+  -->
+
 </div>
+
+
 
 
 {% endblock %}

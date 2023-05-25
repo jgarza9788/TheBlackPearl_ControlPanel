@@ -3,21 +3,34 @@
 
 
 <div class="grid">
-  <div class="head text-white text-center fs-1">
+  <!-- <div class="head text-white text-center fs-1">
     <i class="fas fa-skull-crossbones"></i>
     \ {{ title }}
-  </div>
-  <!-- <div class="spacer mb-auto"></div>     -->
+  </div> -->
 
-  <!-- <div class="row_4"> -->
-    <a class="fs-5 rounded-6 shadow-0-strong btn btn-dark"  href="{{ url_for('controlpanel') }}">
+    <!-- <a class="fs-5 rounded-6 shadow-0-strong btn btn-dark"  href="{{ url_for('controlpanel') }}">
       <div class="w-100 h-100 d-flex align-items-center justify-content-center">
         <i class="fas fa-arrow-left-long"></i>
       <div class="space"></div> 
       Back
       </div>
-    </a>
-  <!-- </div> -->
+    </a> -->
+
+    <div class="row_2">
+      <a class="fs-5 rounded-6 shadow-0-strong btn btn-dark"  href="{{ url_for('controlpanel') }}">
+        <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+          <i class="fas fa-arrow-left-long"></i>
+          <div class="space"></div> 
+          Back
+        </div>
+      </a>
+      <div class="head text-white text-center fs-5">
+        <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+          <i class="fas fa-skull-crossbones"></i>
+          \ {{ title }}
+        </div>
+      </div>
+    </div>
 
 
   {% for item in item_list %}

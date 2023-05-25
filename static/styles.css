@@ -1,12 +1,22 @@
 
+
 body{
 	width: 100vw;
 	height: 100vh;
-	/* 
-	padding-top: 0rem;
-	padding-bottom: 6rem; 
-	*/
+	height: calc(100vh - 6rem);
+
+	/* padding-top: 0rem; */
+	/* padding-bottom: 6rem;  */
+	/* transition: 0.5s; */
+	/* transition-timing-function: ease-in-out; */
+
+	/* animation-name: bodyanim; */
+	/* animation-duration: 5s; */
+	/* background-color: rgba(0, 0, 0, 0.0); */
 }
+
+
+
 
 .grid{
 	width: 100%;
@@ -24,7 +34,7 @@ body{
 	gap: 1rem;
 	padding: 1rem;
 	display: grid;
-	grid-template-rows: 4rem 4rem 1fr 4rem;
+	grid-template-rows: 4rem 1fr 4rem;
 	grid-template-columns: 1fr;
 }
 
@@ -74,4 +84,27 @@ body{
 .space{
 	width: 10px;
 }
+
+.btn{
+	transition: 0.5s;
+	transition-timing-function: ease-in-out;
+	border-width: 0rem;
+	border-color: rgba(0, 0, 0, 0.0);
+
+}
+
+
+/* .btn:hover{
+	border-style: solid;
+	border-width: 5px;
+	border-color: white;
+} */
+
+.btn:hover{
+	border-style: solid;
+	border-width: 0.25rem;
+	border-color: rgba(0, 0, 0, 0.5);
+}
+
+
 

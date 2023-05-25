@@ -3,13 +3,20 @@
 
 
 <div class="grid">
-  <div class="head text-white text-center fs-1">
+  <!-- <div class="head text-white text-center fs-1">
     <i class="fas fa-skull-crossbones"></i>
     \ VPN
-  </div>
-  <!-- <div class="spacer mb-auto"></div>     -->
+  </div> -->
 
-  <!-- <div class="row_4"> -->
+    <!-- <a class="fs-5 rounded-6 shadow-0-strong btn btn-dark"  href="{{ url_for('controlpanel') }}">
+      <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+        <i class="fas fa-arrow-left-long"></i>
+        <div class="space"></div> 
+        Back
+      </div>
+    </a> -->
+
+  <div class="row_2">
     <a class="fs-5 rounded-6 shadow-0-strong btn btn-dark"  href="{{ url_for('controlpanel') }}">
       <div class="w-100 h-100 d-flex align-items-center justify-content-center">
         <i class="fas fa-arrow-left-long"></i>
@@ -17,7 +24,13 @@
         Back
       </div>
     </a>
-  <!-- </div> -->
+    <div class="head text-white text-center fs-5">
+      <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+        <i class="fas fa-skull-crossbones"></i>
+        \ VPN
+      </div>
+    </div>
+  </div>
 
   <a class="fs-5 rounded-6 shadow-0-strong btn btn-dark"  href="{{ url_for('getVPNstatus') }}"> <!-- style="background-color: #2962FF;"> -->
     
@@ -45,16 +58,16 @@
 
   </a>
 
-  <a class="fs-5 rounded-6 shadow-5-strong btn btn-primary"  href="{{ url_for('activateVPN') }}" style="background-color: #1B5E20;">
-    <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+  <a class="fs-5 rounded-6 shadow-5-strong btn "  href="{{ url_for('activateVPN') }}" style="background-color: #1B5E20;">
+    <div class="w-100 h-100 text-white d-flex align-items-center justify-content-center">
     <i class="fas fa-shield"></i>
     <div class="space"></div>
     re-VPN
     </div>
   </a>
 
-  <a class="fs-5 rounded-6 shadow-5-strong btn btn-primary"  href="{{ url_for('killVPN') }}" style="background-color: #F44336;">
-    <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+  <a class="fs-5 rounded-6 shadow-5-strong btn "  href="{{ url_for('killVPN') }}" style="background-color: #F44336;">
+    <div class="w-100 h-100 text-white d-flex align-items-center justify-content-center">
     <i class="fas fa-skull"></i>
     <div class="space"></div>
     kill-VPN

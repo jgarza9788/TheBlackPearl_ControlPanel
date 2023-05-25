@@ -223,6 +223,7 @@ def controlpanel():
 def MOVIES():  
 
     movies_files = get_files(root=r'D:\Torrents\Movies',extensions=['mkv','mp4'])
+    # movies_files = get_files(root=r'D:\Comics',extensions=['cbr','pdf'])
 
     clear_cache()  
     return render_template(
@@ -365,7 +366,7 @@ if __name__ == "__main__":
     # app.run(debug=False,host='0.0.0.0',port="8800")
     # app.run(host='0.0.0.0',port="8800",debug=False)
     # app.run(host='192.168.1.223',port="5000")
-    # app.run(host='0.0.0.0',port="5000",debug=True)
-    app.run(host='0.0.0.0',port="8800",debug=False)
+    app.run(host='0.0.0.0',port="5000",debug=True)
+    # app.run(host='0.0.0.0',port="8800",debug=False)
     # app.run(host='192.168.1.200',port="8800",debug=False)
     # app.run()
