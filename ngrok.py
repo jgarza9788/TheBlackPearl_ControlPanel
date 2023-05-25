@@ -15,6 +15,12 @@ def main():
         os.remove('ngrok_log')
     except:
         pass
+
+    try:
+        os.remove(r'C:\Users\JGarza\Google Drive\TBP_link.txt')
+    except:
+        pass
+    
     x = run_cmd('ngrok http 8800 --log=ngrok_log')
     time.sleep(5)
 

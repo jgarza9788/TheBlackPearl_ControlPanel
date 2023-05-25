@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<div class="grid">
+  <div class="head text-white text-center fs-1">
+    <i class="fas fa-skull-crossbones"></i>
+    \ VPN
+  </div>
+  <!-- <div class="spacer mb-auto"></div>     -->
+
+  <!-- <div class="row_4"> -->
+    <a class="fs-5 rounded-6 shadow-0-strong btn btn-dark"  href="{{ url_for('controlpanel') }}">
+      <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+        <i class="fas fa-arrow-left-long"></i>
+        <div class="space"></div> 
+        Back
+      </div>
+    </a>
+  <!-- </div> -->
+
+  <a class="fs-5 rounded-6 shadow-0-strong btn btn-dark"  href="{{ url_for('getVPNstatus') }}"> <!-- style="background-color: #2962FF;"> -->
+    
+    {% if VPN_ON %}
+
+    <div class="w-100 h-100 text-success d-flex align-items-center justify-content-center">
+      VPN Status:
+      <div class="space"></div>
+      <i class="fas fa-circle-check"></i> 
+      <div class="space"></div>
+      ON
+    </div>
+
+    {% else %}
+
+    <div class="w-100 h-100 text-danger d-flex align-items-center justify-content-center">
+      VPN Status:
+      <div class="space"></div>
+      <i class="fas fa-circle-xmark"></i> 
+      <div class="space"></div>
+      OFF
+    </div>
+
+    {% endif %}
+
+  </a>
+
+  <a class="fs-5 rounded-6 shadow-5-strong btn btn-primary"  href="{{ url_for('activateVPN') }}" style="background-color: #1B5E20;">
+    <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+    <i class="fas fa-shield"></i>
+    <div class="space"></div>
+    re-VPN
+    </div>
+  </a>
+
+  <a class="fs-5 rounded-6 shadow-5-strong btn btn-primary"  href="{{ url_for('killVPN') }}" style="background-color: #F44336;">
+    <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+    <i class="fas fa-skull"></i>
+    <div class="space"></div>
+    kill-VPN
+    </div>
+  </a>
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<div class="grid-item">
+  <div class="head text-white text-center fs-1">
+    <i class="fas fa-skull-crossbones"></i>
+    \ ITEM
+  </div>
+  <!-- <div class="spacer mb-auto"></div>     -->
+
+  <!-- <div class="row_4"> -->
+    <a class="fs-5 rounded-6 shadow-0-strong btn btn-dark"  href="{{ url_for( category ) }}">
+      <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+        <i class="fas fa-arrow-left-long"></i>
+        <div class="space"></div> 
+        Back
+      </div>
+    </a>
+  <!-- </div> -->
+
+  <div class="text-white text-break">
+    {{item}}
+  </div>
+  <a class="h4rem fs-5 rounded-6 shadow-5-strong btn btn-primary" href="{{ url_for('download',fullpath=item)}}">
+
+    <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+      <i class="fas fa-download"></i>
+    </div>
+
+  </a>
+
+
+  {#
+  {% for item in item_list %}
+
+    <a class="h4rem fs-5 rounded-6 shadow-5-strong btn btn-primary" href="{{ url_for('MOVIES')}}">
+
+      <div class="d-flex align-items-center justify-content-left">
+      <span class="d-inline-block text-truncate text-capitalize" style="max-width: calc(100vw - 6rem)">
+        {{ item['file'] }}
+      </span>
+      </div>
+    </a>
+
+  {% endfor %}
+  #}
+
+</div>
+
+
+{% endblock %}

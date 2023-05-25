@@ -5,46 +5,58 @@
 <div class="grid">
   <div class="head text-white text-center fs-1">
     <i class="fas fa-skull-crossbones"></i>
-    TBP Control Panel
+    \ CP
   </div>
   <!-- <div class="spacer mb-auto"></div>     -->
 
-  <a class="R11 fs-5 rounded-6 shadow-5-strong btn btn-primary"  href="{{ url_for('activateVPN') }}" style="background-color: #1B5E20;">
+  <!-- <div class="row_4"> -->
+  <a class="fs-5 rounded-6 shadow-0-strong btn btn-dark"  href="{{ url_for('logout') }}">
     <div class="w-100 h-100 d-flex align-items-center justify-content-center">
-    <i class="fas fa-shield"></i>
+      <!-- <i class="fas fa-arrow-left-long"></i> -->
+      <i class="fas fa-xmark"></i>
+      <div class="space"></div>
+      Logout
+    </div>
+  </a>
+  <!-- </div> -->
+
+
+  <a class="fs-5 rounded-6 shadow-5-strong btn btn-primary"  href="{{ url_for('MOVIES') }}">
+   <!-- style="background-color: #0d00ff;"> -->
+    <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+      <i class="fas fa-film"></i>
     <div class="space"></div>
-    re-VPN
+    Movies
     </div>
   </a>
 
-  <a class="R12 fs-5 rounded-6 shadow-5-strong btn btn-primary"  href="{{ url_for('killVPN') }}" style="background-color: #F44336;">
+  <a class="fs-5 rounded-6 shadow-5-strong btn btn-primary"  href="{{ url_for('SHOWS') }}">
+    <!-- style="background-color: #0d00ff;"> -->
+     <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+      <i class="fas fa-tv"></i>
+     <div class="space"></div>
+     Shows
+     </div>
+   </a>
+
+   <a class="fs-5 rounded-6 shadow-5-strong btn btn-primary"  href="{{ url_for('INPROGRESS') }}">
+    <!-- style="background-color: #0d00ff;"> -->
+     <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+      <i class="fas fa-bars-progress"></i>
+     <div class="space"></div>
+     In Progress
+     </div>
+   </a>
+  
+  <a class="fs-5 rounded-6 shadow-5-strong btn btn-primary"  href="{{ url_for('VPN') }}">
+    <!-- style="background-color: #F44336;"> -->
     <div class="w-100 h-100 d-flex align-items-center justify-content-center">
-    <i class="fas fa-skull"></i>
+      <i class="fas fa-shield"></i>
     <div class="space"></div>
-    kill-VPN
+    VPN
     </div>
   </a>
 
-  <a class="R2 fs-5 rounded-6 shadow-5-strong btn btn-primary"  href="{{ url_for('getVPNstatus') }}" style="background-color: #2962FF;">
-    <div class="w-100 h-100 d-flex align-items-center justify-content-center">
-    <!-- <i class="fas fa-rotate"></i> -->
-    VPN Status:
-    <div class="space"></div>
-    {% if VPN_ON %}
-      <i class="fas fa-circle-check"></i> 
-      <div class="space"></div>
-      ON
-    {% else %}
-      <i class="fas fa-circle-xmark"></i> 
-      <div class="space"></div>
-      OFF
-    {% endif %}
-    <div class="space"></div>
-    <!-- {{VPN_ON}} -->
-    <!-- <div class="space"></div> -->
-    
-    </div>
-  </a>
 </div>
 
 

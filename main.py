@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 
-# from flask_ngrok import run_with_ngrok
+import shutil
 
 import time
 
@@ -38,6 +38,8 @@ def run_cmd(cmd):
 
 
 def VPN_running():
+    # return True
+
     rc = run_cmd("tasklist")
 
     rc = str(rc.stdout.read())
@@ -82,6 +84,50 @@ with app.app_context():
 ############################################
 
 
+def get_files(root:str='D:\\',extensions:list=[]) -> list:
+    result = []
+    for path, directories, files in os.walk(root):
+        for file in files:
+            for e in extensions:
+                if file.startswith('.'):
+                    continue
+                if file.endswith(e):
+                    result.append({
+                        # 'id': len(result),
+                        'fullpath': os.path.join(path, file),
+                        'file': file
+                    })
+                continue
+    return result
+
+            
+movies_files = get_files(root=r'D:\Torrents\Movies',extensions=['mkv','mp4'])
+shows_files = get_files(root=r'D:\Torrents\Shows',extensions=['mkv','mp4'])
+inprogress_files = get_files(root=r'D:\Torrents\InProgress',extensions=['mkv','mp4'])
+
+# app.config['ROOT_FOLDER'] = r'\\Theblackpearl\d\Torrents'
+# movies_files = get_files(root=r'\\Theblackpearl\d\Torrents\Movies',extensions=['mkv','mp4'])
+# shows_files = get_files(root=r'\\Theblackpearl\d\Torrents\Shows',extensions=['mkv','mp4'])
+# inprogress_files = get_files(root=r'\\Theblackpearl\d\Torrents\InProgress',extensions=['mkv','mp4'])
+
+# app.config['ROOT_FOLDER'] = r'D:\Comics'
+# movies_files = get_files(root=r'D:\Comics',extensions=['cbr','pdf'])
+
+
+
+
+############################################
+
+
+def clear_cache():
+    static_cache = os.path.join(DIR,'static','cache')
+    listdir = os.listdir(static_cache)
+    if len(listdir) > 10:
+        for i in os.listdir(static_cache):
+            try:
+                os.remove(os.path.join(static_cache,i))
+            except:
+                pass
 
 ############################################
 
@@ -151,10 +197,17 @@ def login():
 
     return render_template("login.html", logged_in=current_user.is_authenticated)
 
+@app.route('/logout')
+# @login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
+
 @app.route('/controlpanel')
 @login_required
 def controlpanel():
-    print(current_user.name)
+    
     return render_template(
         "controlpanel.html", 
         name=current_user.name, 
@@ -162,52 +215,148 @@ def controlpanel():
         VPN_ON=VPN_ON
         )
 
-@app.route('/logout')
+
+# files0 #
+
+@app.route('/MOVIES')
 @login_required
-def logout():
-    logout_user()
-    return redirect(url_for('home'))
+def MOVIES():  
+
+    movies_files = get_files(root=r'D:\Torrents\Movies',extensions=['mkv','mp4'])
+
+    clear_cache()  
+    return render_template(
+        "ITEM_LIST.html", 
+        name=current_user.name, 
+        logged_in=True,
+        title = 'Movies',
+        category='MOVIES',
+        item_list = movies_files
+        )
+
+@app.route('/SHOWS')
+@login_required
+def SHOWS():    
+
+    shows_files = get_files(root=r'D:\Torrents\Shows',extensions=['mkv','mp4'])
+
+    clear_cache()
+    return render_template(
+        "ITEM_LIST.html", 
+        name=current_user.name, 
+        logged_in=True,
+        title = 'Shows',
+        category='SHOWS',
+        item_list = shows_files
+        )
+
+@app.route('/INPROGRESS')
+@login_required
+def INPROGRESS():  
+
+    inprogress_files = get_files(root=r'D:\Torrents\InProgress',extensions=['mkv','mp4'])
+
+    clear_cache()
+    return render_template(
+        "ITEM_LIST.html", 
+        name=current_user.name, 
+        logged_in=True,
+        title = 'In Progress',
+        category='INPROGRESS',
+        item_list = inprogress_files
+        )
+
+@app.route('/<category>/<fullpath>')
+@login_required
+def ITEM(category,fullpath):    
+    print(category,fullpath)
+    return render_template(
+        "ITEM.html", 
+        name=current_user.name, 
+        logged_in=True,
+        category = category,
+        item = fullpath
+        )
+
+@app.route('/download/<fullpath>')
+@login_required
+def download(fullpath):    
+    # print(category,fullpath)
+    # return render_template(
+    #     "ITEM.html", 
+    #     name=current_user.name, 
+    #     logged_in=True,
+    #     category = category,
+    #     item = fullpath
+    #     )
+
+    file = fullpath.split('\\')[-1]
+
+    path = os.path.join(DIR,'static','cache',file)
+    shutil.copy2(fullpath,path)
+
+    # return send_from_directory(app.config['ROOT_FOLDER'],path)
+    return send_from_directory('static\cache',file, as_attachment=True)
+
+# VPN #
+
+@app.route('/VPN')
+@login_required
+def VPN():    
+    VPN_ON = VPN_running()
+
+    return render_template(
+        "VPN.html", 
+        name=current_user.name, 
+        logged_in=True,
+        VPN_ON=VPN_ON
+        )
 
 @app.route('/activateVPN')
 @login_required
 def activateVPN():
     os.startfile(r"C:\Users\JGarza\GitHub\VPNTools\activate_VPN_close.cmd")
-    VPN_ON = True
-    return render_template(
-        "controlpanel.html", 
-        name=current_user.name, 
-        logged_in=True,
-        VPN_ON=VPN_ON
-        )
+    # return render_template(
+    #     "controlpanel.html", 
+    #     name=current_user.name, 
+    #     logged_in=True,
+    #     VPN_ON=VPN_ON
+    #     )
+    return redirect(url_for('VPN'))
 
 @app.route('/killVPN')
 @login_required
 def killVPN():
     os.startfile(r"C:\Users\JGarza\GitHub\VPNTools\kill_VPN_close.cmd")
-    VPN_ON = False
-    return render_template(
-        "controlpanel.html", 
-        name=current_user.name, 
-        logged_in=True,
-        VPN_ON=VPN_ON
-        )
+    # VPN_ON = False
+    # return render_template(
+    #     "controlpanel.html", 
+    #     name=current_user.name, 
+    #     logged_in=True,
+    #     VPN_ON=VPN_ON
+    #     )
+    return redirect(url_for('VPN'))
 
 @app.route('/getVPNstatus')
 @login_required
 def getVPNstatus():
-    VPN_ON = VPN_running()
-    # time.sleep(5)
-    return render_template(
-        "controlpanel.html", 
-        name=current_user.name, 
-        logged_in=True,
-        VPN_ON=VPN_ON
-        )
+    # VPN_ON = VPN_running()
+    # # time.sleep(5)
+    # return render_template(
+    #     "controlpanel.html", 
+    #     name=current_user.name, 
+    #     logged_in=True,
+    #     VPN_ON=VPN_ON
+    #     )
+    # VPN_ON = VPN_running()
+    return redirect(url_for('VPN'))
 
 
 
 
 if __name__ == "__main__":
+    # print(*movies_files,sep='\n')
+
     # app.run(debug=True, host= '192.168.1.254', port="8800")
     # app.run(debug=True,port="8800")
     # app.run(host='0.0.0.0',port=5000)
@@ -217,5 +366,6 @@ if __name__ == "__main__":
     # app.run(host='0.0.0.0',port="8800",debug=False)
     # app.run(host='192.168.1.223',port="5000")
     # app.run(host='0.0.0.0',port="5000",debug=True)
-    app.run(host='192.168.1.200',port="8800",debug=False)
+    app.run(host='0.0.0.0',port="8800",debug=False)
+    # app.run(host='192.168.1.200',port="8800",debug=False)
     # app.run()
