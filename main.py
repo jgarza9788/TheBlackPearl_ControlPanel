@@ -5,7 +5,8 @@ from flask_login import UserMixin, login_user, LoginManager, login_required, cur
 
 import shutil
 
-import time
+import time,re
+from fuzzywuzzy import fuzz
 
 import Config
 SECRET_KEY = Config.Config().data["SECRET_KEY"]
@@ -85,6 +86,7 @@ with app.app_context():
 
 
 def get_files(root:str='D:\\',extensions:list=[]) -> list:
+    print('get_files')
     result = []
     for path, directories, files in os.walk(root):
         for file in files:
@@ -113,7 +115,23 @@ inprogress_files = get_files(root=r'D:\Torrents\InProgress',extensions=['mkv','m
 # app.config['ROOT_FOLDER'] = r'D:\Comics'
 # movies_files = get_files(root=r'D:\Comics',extensions=['cbr','pdf'])
 
+ITEMS = []
+ITEMSTIME = 0.0
+def get_items():
+    global ITEMS
+    global ITEMSTIME
 
+    if (time.time() - ITEMSTIME) > 3600:
+        ITEMS = get_files(root=r'D:\Torrents\Movies',extensions=['mkv','mp4'])
+        ITEMS += get_files(root=r'D:\Torrents\Shows',extensions=['mkv','mp4'])
+
+        if len(ITEMS) == 0:
+            ITEMS += get_files(root=r'\\Theblackpearl\d\Torrents\Movies',extensions=['mkv','mp4'])
+            ITEMS += get_files(root=r'\\Theblackpearl\d\Torrents\Shows',extensions=['mkv','mp4']) 
+
+        ITEMSTIME = time.time()
+    
+    return ITEMS
 
 
 ############################################
@@ -224,6 +242,7 @@ def MOVIES():
 
     movies_files = get_files(root=r'D:\Torrents\Movies',extensions=['mkv','mp4'])
     # movies_files = get_files(root=r'D:\Comics',extensions=['cbr','pdf'])
+    movies_files += get_files(root=r'\\Theblackpearl\d\Torrents\Movies',extensions=['mkv','mp4'])
 
     clear_cache()  
     return render_template(
@@ -266,6 +285,57 @@ def INPROGRESS():
         category='INPROGRESS',
         item_list = inprogress_files
         )
+
+@app.route('/ITEMS')
+@login_required
+def ITEMS():  
+
+    items = get_items()
+
+    clear_cache()
+    return render_template(
+        "ITEM_LIST.html", 
+        name=current_user.name, 
+        logged_in=True,
+        title = 'Items',
+        category='ITEMS',
+        item_list = items
+        )
+
+@app.route("/ITEMSQ/<query>", methods=['GET', 'POST'])
+@login_required
+def ITEMS_QUERY(query):
+
+    print(query)
+
+    if len(query) < 2:
+        return redirect(url_for("ITEMS"))
+
+    query = query.lower()
+
+    pl = []
+    for i in get_items():
+        if query in str(i).lower():
+            pl.append(i)
+        else:
+            temp = re.sub(r'[^A-Za-z]+',',',str(i).lower())
+            for w in re.split(',',temp):
+                # print(w)
+                if fuzz.ratio(query, w) > 85:
+                    pl.append(i)
+                    break;
+    
+    # return render_template("portfolio.html",portfolio_data=pl,query=query)
+    return render_template(
+        "ITEM_LIST.html", 
+        name=current_user.name, 
+        logged_in=True,
+        title = 'Query',
+        category='ITEMS',
+        item_list = pl
+        )
+
+
 
 @app.route('/<category>/<fullpath>')
 @login_required
