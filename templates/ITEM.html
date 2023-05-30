@@ -2,31 +2,18 @@
 {% block content %}
 
 
-<div class="grid-item">
-  <!-- <div class="head text-white text-center fs-1">
-    <i class="fas fa-skull-crossbones"></i>
-    \ ITEM
-  </div> -->
+<div class="grid-item animate__animated animate__fadeIn">
 
-  <!-- <a class="fs-5 rounded-6 shadow-0-strong btn btn-dark"  href="{{ url_for( category ) }}">
-    <div class="w-100 h-100 d-flex align-items-center justify-content-center">
-      <i class="fas fa-arrow-left-long"></i>
-      <div class="space"></div> 
-      Back
-    </div>
-  </a> -->
-
-  <div class="row_2">
+  <div class="row_2q">
     <a class="fs-5 rounded-6 shadow-0-strong btn btn-dark"  href="{{ url_for(category) }}">
       <div class="w-100 h-100 d-flex align-items-center justify-content-center">
         <i class="fas fa-arrow-left-long"></i>
-        <div class="space"></div> 
-        Back
       </div>
     </a>
-    <div class="head text-white text-center fs-5">
+    <div class="head text-white text-center fs-1">
       <div class="w-100 h-100 d-flex align-items-center justify-content-center">
         <i class="fas fa-skull-crossbones"></i>
+        <div class="space"></div> 
         \ ITEM
       </div>
     </div>
@@ -36,7 +23,7 @@
   <div class="fs-5 text-white text-break">
     {{item}}
   </div>
-  <a class="h4rem fs-5 rounded-6 shadow-5-strong btn btn-primary" href="{{ url_for('download',fullpath=item)}}">
+  <a class="h4rem fs-5 rounded-6 shadow-5-strong btn btn-primary animate__animated animate__fadeInDown animate__delay-1s" href="{{ url_for('download',fullpath=item)}}">
 
     <div class="w-100 h-100 d-flex align-items-center justify-content-center">
       <i class="fas fa-download"></i>

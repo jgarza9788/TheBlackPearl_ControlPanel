@@ -64,7 +64,7 @@ body{
 	padding: 0rem;
 	display: grid;
 	grid-template-rows: 1fr; 
-	grid-template-columns: 1fr 4fr;
+	grid-template-columns: 4rem 1fr;
 }
 
 .row_3{

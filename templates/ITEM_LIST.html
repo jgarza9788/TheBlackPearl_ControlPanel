@@ -39,31 +39,25 @@
 
 </script>
 
-<div class="grid">
+<div class="grid animate__animated animate__fadeIn">
 
 
-    <div class="row_2">
+    <div class="row_2q">
       <a class="fs-5 rounded-6 shadow-0-strong btn btn-dark"  href="{{ url_for('controlpanel') }}">
         <div class="w-100 h-100 d-flex align-items-center justify-content-center">
           <i class="fas fa-arrow-left-long"></i>
-          <div class="space"></div> 
-          Back
         </div>
       </a>
-      <div class="head text-white text-center fs-5">
+      <div class="head text-white text-center fs-1">
         <div class="w-100 h-100 d-flex align-items-center justify-content-center">
           <i class="fas fa-skull-crossbones"></i>
+          <div class="space"></div>
           \ {{ title }}
         </div>
       </div>
     </div>
 
   <div class="row_2q"> 
-    <!-- <a onclick="" class="w-100 h-100 fs-5 rounded-6 shadow-5-strong btn btn-danger">
-      <div class="d-flex align-items-center justify-content-center">
-      <i class="fas fa-square-xmark"></i>
-      </div>
-    </a> -->
 
     <a onclick="clear_search()"  class="fs-5 rounded-6 shadow-5-strong btn btn-danger" >
       <div class="w-100 h-100 d-flex align-items-center justify-content-center">
@@ -79,33 +73,8 @@
   
   {% for item in item_list %}
 
-    <!-- <a class="h4rem rounded-6 shadow-5-strong btn btn-primary" href="{{ url_for('ITEM',category=category,fullpath=item['fullpath'])}}"> -->
 
-      <!-- <div class="d-flex align-items-center justify-content-left">
-      <span class="d-inline-block text-truncate text-capitalize" style="max-width: calc(100vw - 6rem)">
-        {{ item['file'] }}
-      </span>
-      </div> -->
-
-      <!-- <span class="d-inline-block text-truncate text-capitalize" style="max-width: calc(100vw - 6rem)">
-        <div class="fs-5 text-white">
-          {{ item['file'] }}
-        </div> -->
-        <!-- <br />
-        <div class="fs-10 text-white-50">
-          {{ item['fullpath'] }}
-        </div> -->
-      <!-- </span> -->
-
-
-      <!-- <br />
-      <span class="fs-20 d-inline-block text-truncate text-capitalize" style="max-width: calc(100vw - 6rem)">
-      {{ item['fullpath'] }}
-      </span> -->
-      
-    <!-- </a> -->
-
-    <a class="h4rem rounded-6 shadow-5-strong btn btn-primary" href="{{ url_for('ITEM',category=category,fullpath=item['fullpath'])}}">
+    <a class="h4rem rounded-6 shadow-5-strong btn btn-primary animate__animated animate__fadeInDown" href="{{ url_for('ITEM',category=category,fullpath=item['fullpath'])}}">
       <div class="text-truncate text-capitalize" style="max-width: calc(100vw - 6rem)">
         <span class="fs-5 ">
           {{ item['file'] }}
