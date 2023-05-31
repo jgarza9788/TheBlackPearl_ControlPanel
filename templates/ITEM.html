@@ -2,9 +2,9 @@
 {% block content %}
 
 
-<div class="grid-item animate__animated animate__fadeIn">
+<div class="grid-item">
 
-  <div class="row_2q">
+  <div class="row_2h">
     <a class="fs-5 rounded-6 shadow-0-strong btn btn-dark"  href="{{ url_for(category) }}">
       <div class="w-100 h-100 d-flex align-items-center justify-content-center">
         <i class="fas fa-arrow-left-long"></i>
@@ -23,7 +23,7 @@
   <div class="fs-5 text-white text-break">
     {{item}}
   </div>
-  <a class="h4rem fs-5 rounded-6 shadow-5-strong btn btn-primary animate__animated animate__fadeInDown animate__delay-1s" href="{{ url_for('download',fullpath=item)}}">
+  <a class="h4rem fs-5 rounded-6 shadow-5-strong btn btn-primary" href="{{ url_for('download',fullpath=item)}}">
 
     <div class="w-100 h-100 d-flex align-items-center justify-content-center">
       <i class="fas fa-download"></i>
@@ -34,20 +34,6 @@
   </a>
 
 
-  {#
-  {% for item in item_list %}
-
-    <a class="h4rem fs-5 rounded-6 shadow-5-strong btn btn-primary" href="{{ url_for('MOVIES')}}">
-
-      <div class="d-flex align-items-center justify-content-left">
-      <span class="d-inline-block text-truncate text-capitalize" style="max-width: calc(100vw - 6rem)">
-        {{ item['file'] }}
-      </span>
-      </div>
-    </a>
-
-  {% endfor %}
-  #}
 
 </div>
 

@@ -300,7 +300,7 @@ def ITEMS():
         logged_in=True,
         title = 'ITEMS',
         category='ITEMS',
-        item_list = items[0:50]
+        item_list = items[0:25]
         )
 
 @app.route("/ITEMSQ/<query>", methods=['GET', 'POST'])
@@ -424,7 +424,11 @@ def getVPNstatus():
     return redirect(url_for('VPN'))
 
 
+from math import sin, cos, acos
 
+@app.context_processor
+def utility_processor():
+    return dict(cos=cos, sin=sin, acos=acos)
 
 if __name__ == "__main__":
     # print(*movies_files,sep='\n')
@@ -437,7 +441,7 @@ if __name__ == "__main__":
     # app.run(debug=False,host='0.0.0.0',port="8800")
     # app.run(host='0.0.0.0',port="8800",debug=False)
     # app.run(host='192.168.1.223',port="5000")
-    # app.run(host='0.0.0.0',port="5000",debug=True)
-    app.run(host='0.0.0.0',port="8800",debug=False)
+    app.run(host='0.0.0.0',port="5000",debug=True)
+    # app.run(host='0.0.0.0',port="8800",debug=False)
     # app.run(host='192.168.1.200',port="8800",debug=False)
     # app.run()

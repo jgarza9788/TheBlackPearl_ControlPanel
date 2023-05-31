@@ -26,6 +26,10 @@ body{
 	display: grid;
 	grid-template-rows: repeat(auto-fill, 4rem);
 	grid-template-columns: 1fr;
+
+	animation-name: fadein;
+  	animation-duration: 666ms;
+	animation-timing-function: ease-in;
 }
 
 .grid-item{
@@ -36,6 +40,10 @@ body{
 	display: grid;
 	grid-template-rows: 4rem 1fr 4rem;
 	grid-template-columns: 1fr;
+
+	animation-name: fadein;
+	animation-duration: 666ms;
+	animation-timing-function: ease-in;	
 }
 
 .grid-form{
@@ -45,6 +53,23 @@ body{
 	padding: 0rem;
 	display: grid;
 	grid-template-rows: repeat(4, 4rem);
+
+	animation-name: fadein;
+	animation-duration: 666ms;
+	animation-timing-function: ease-in;	
+}
+
+
+@keyframes fadein {
+from {
+	opacity: 0.0;
+	scale: 0.95;
+}
+
+to {
+	opacity: 1.0;
+	scale: 1.00;
+}
 }
 
 .row_2{
@@ -65,6 +90,16 @@ body{
 	display: grid;
 	grid-template-rows: 1fr; 
 	grid-template-columns: 4rem 1fr;
+}
+
+.row_2h{
+	width: 100%;
+	height: 100%;
+	gap: 1rem;
+	padding: 0rem;
+	display: grid;
+	grid-template-rows: 1fr; 
+	grid-template-columns: 4rem 1fr 4rem;
 }
 
 .row_3{
@@ -91,6 +126,24 @@ body{
 	height: 4rem !important;
 }
 
+.item_fadein{
+	
+	animation-name: item_fadein;
+	animation-timing-function: ease-in;	
+}
+
+@keyframes item_fadein {
+	from {
+		opacity: 0.0;
+		/* scale: 1.0; */
+	}
+	
+	to {
+		opacity: 1.0;
+		/* scale: 1.0; */
+	}
+}
+
 .space{
 	width: 10px;
 }
@@ -106,4 +159,6 @@ body{
 }
 
 
-
+#search-input{
+	padding: 0.5rem;
+}
