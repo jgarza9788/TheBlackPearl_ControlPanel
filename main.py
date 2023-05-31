@@ -103,9 +103,9 @@ def get_files(root:str='D:\\',extensions:list=[]) -> list:
     return result
 
             
-movies_files = get_files(root=r'D:\Torrents\Movies',extensions=['mkv','mp4'])
-shows_files = get_files(root=r'D:\Torrents\Shows',extensions=['mkv','mp4'])
-inprogress_files = get_files(root=r'D:\Torrents\InProgress',extensions=['mkv','mp4'])
+# movies_files = get_files(root=r'D:\Torrents\Movies',extensions=['mkv','mp4'])
+# shows_files = get_files(root=r'D:\Torrents\Shows',extensions=['mkv','mp4'])
+# inprogress_files = get_files(root=r'D:\Torrents\InProgress',extensions=['mkv','mp4'])
 
 # app.config['ROOT_FOLDER'] = r'\\Theblackpearl\d\Torrents'
 # movies_files = get_files(root=r'\\Theblackpearl\d\Torrents\Movies',extensions=['mkv','mp4'])
@@ -133,6 +133,7 @@ def get_items():
     
     return ITEMS
 
+# items = get_items()
 
 ############################################
 
@@ -297,9 +298,9 @@ def ITEMS():
         "ITEM_LIST.html", 
         name=current_user.name, 
         logged_in=True,
-        title = 'Items',
+        title = 'ITEMS',
         category='ITEMS',
-        item_list = items
+        item_list = items[0:50]
         )
 
 @app.route("/ITEMSQ/<query>", methods=['GET', 'POST'])
@@ -436,7 +437,7 @@ if __name__ == "__main__":
     # app.run(debug=False,host='0.0.0.0',port="8800")
     # app.run(host='0.0.0.0',port="8800",debug=False)
     # app.run(host='192.168.1.223',port="5000")
-    app.run(host='0.0.0.0',port="5000",debug=True)
-    # app.run(host='0.0.0.0',port="8800",debug=False)
+    # app.run(host='0.0.0.0',port="5000",debug=True)
+    app.run(host='0.0.0.0',port="8800",debug=False)
     # app.run(host='192.168.1.200',port="8800",debug=False)
     # app.run()
