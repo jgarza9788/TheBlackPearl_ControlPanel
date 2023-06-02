@@ -74,8 +74,8 @@
   {% for item in item_list %}
 
 
-    <a class="h4rem rounded-6 shadow-5-strong btn btn-primary item_fadein" href="{{ url_for('ITEM',category=category,fullpath=item['fullpath'])}}" style="animation-duration: {{ sin(loop.index*0.15) }}s;">
-      <div class="text-truncate text-capitalize" style="max-width: calc(100vw - 6rem)">
+    <a class="h4rem rounded-6 shadow-5-strong btn btn-primary" href="{{ url_for('ITEM',category=category,fullpath=item['fullpath'])}}" style="animation-duration: {{ sin(loop.index*0.15) }}s;">
+      <div class="text-truncate text-capitalize" style="max-width: 720px">
         <span class="fs-5 ">
           {{ item['file'] }}
         </span>
@@ -91,7 +91,7 @@
 
 
   <a class="h4rem rounded-6 shadow-0-strong btn btn-dark ">
-    <div class="text-truncate text-capitalize" style="max-width: calc(100vw - 6rem)">
+    <div class="text-truncate text-capitalize" style="max-width: 720px">
       <span class="fs-5 ">
         {{ item_list|length }} Items Above
       </span>

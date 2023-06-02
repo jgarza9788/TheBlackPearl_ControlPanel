@@ -226,6 +226,9 @@ def logout():
 @app.route('/controlpanel')
 @login_required
 def controlpanel():
+
+    if current_user.is_authenticated == False:
+        return redirect(url_for('login'))
     
     return render_template(
         "controlpanel.html", 
@@ -237,59 +240,12 @@ def controlpanel():
 
 # files0 #
 
-@app.route('/MOVIES')
-@login_required
-def MOVIES():  
-
-    movies_files = get_files(root=r'D:\Torrents\Movies',extensions=['mkv','mp4'])
-    # movies_files = get_files(root=r'D:\Comics',extensions=['cbr','pdf'])
-    movies_files += get_files(root=r'\\Theblackpearl\d\Torrents\Movies',extensions=['mkv','mp4'])
-
-    clear_cache()  
-    return render_template(
-        "ITEM_LIST.html", 
-        name=current_user.name, 
-        logged_in=True,
-        title = 'Movies',
-        category='MOVIES',
-        item_list = movies_files
-        )
-
-@app.route('/SHOWS')
-@login_required
-def SHOWS():    
-
-    shows_files = get_files(root=r'D:\Torrents\Shows',extensions=['mkv','mp4'])
-
-    clear_cache()
-    return render_template(
-        "ITEM_LIST.html", 
-        name=current_user.name, 
-        logged_in=True,
-        title = 'Shows',
-        category='SHOWS',
-        item_list = shows_files
-        )
-
-@app.route('/INPROGRESS')
-@login_required
-def INPROGRESS():  
-
-    inprogress_files = get_files(root=r'D:\Torrents\InProgress',extensions=['mkv','mp4'])
-
-    clear_cache()
-    return render_template(
-        "ITEM_LIST.html", 
-        name=current_user.name, 
-        logged_in=True,
-        title = 'In Progress',
-        category='INPROGRESS',
-        item_list = inprogress_files
-        )
-
 @app.route('/ITEMS')
 @login_required
 def ITEMS():  
+
+    if current_user.is_authenticated == False:
+        return redirect(url_for('login'))
 
     items = get_items()
 
@@ -306,6 +262,9 @@ def ITEMS():
 @app.route("/ITEMSQ/<query>", methods=['GET', 'POST'])
 @login_required
 def ITEMS_QUERY(query):
+
+    if current_user.is_authenticated == False:
+        return redirect(url_for('login'))
 
     print(query)
 
@@ -340,7 +299,11 @@ def ITEMS_QUERY(query):
 
 @app.route('/<category>/<fullpath>')
 @login_required
-def ITEM(category,fullpath):    
+def ITEM(category,fullpath):  
+
+    if current_user.is_authenticated == False:
+        return redirect(url_for('login'))
+  
     print(category,fullpath)
     return render_template(
         "ITEM.html", 
@@ -353,14 +316,8 @@ def ITEM(category,fullpath):
 @app.route('/download/<fullpath>')
 @login_required
 def download(fullpath):    
-    # print(category,fullpath)
-    # return render_template(
-    #     "ITEM.html", 
-    #     name=current_user.name, 
-    #     logged_in=True,
-    #     category = category,
-    #     item = fullpath
-    #     )
+    if current_user.is_authenticated == False:
+        return redirect(url_for('login'))
 
     file = fullpath.split('\\')[-1]
 
@@ -375,6 +332,9 @@ def download(fullpath):
 @app.route('/VPN')
 @login_required
 def VPN():    
+    if current_user.is_authenticated == False:
+        return redirect(url_for('login'))
+    
     VPN_ON = VPN_running()
 
     return render_template(
@@ -387,40 +347,27 @@ def VPN():
 @app.route('/activateVPN')
 @login_required
 def activateVPN():
+    if current_user.is_authenticated == False:
+        return redirect(url_for('login'))
+    
     os.startfile(r"C:\Users\JGarza\GitHub\VPNTools\activate_VPN_close.cmd")
-    # return render_template(
-    #     "controlpanel.html", 
-    #     name=current_user.name, 
-    #     logged_in=True,
-    #     VPN_ON=VPN_ON
-    #     )
     return redirect(url_for('VPN'))
 
 @app.route('/killVPN')
 @login_required
 def killVPN():
+    if current_user.is_authenticated == False:
+        return redirect(url_for('login'))
+    
     os.startfile(r"C:\Users\JGarza\GitHub\VPNTools\kill_VPN_close.cmd")
-    # VPN_ON = False
-    # return render_template(
-    #     "controlpanel.html", 
-    #     name=current_user.name, 
-    #     logged_in=True,
-    #     VPN_ON=VPN_ON
-    #     )
     return redirect(url_for('VPN'))
 
 @app.route('/getVPNstatus')
 @login_required
 def getVPNstatus():
-    # VPN_ON = VPN_running()
-    # # time.sleep(5)
-    # return render_template(
-    #     "controlpanel.html", 
-    #     name=current_user.name, 
-    #     logged_in=True,
-    #     VPN_ON=VPN_ON
-    #     )
-    # VPN_ON = VPN_running()
+    if current_user.is_authenticated == False:
+        return redirect(url_for('login'))
+    
     return redirect(url_for('VPN'))
 
 

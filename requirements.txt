@@ -1,5 +1,6 @@
-Flask==2.3.2
+Flask==2.2.3
 Flask_Login==0.6.2
+flask_mongoengine==1.0.0
 flask_sqlalchemy==3.0.3
 fuzzywuzzy==0.18.0
 json5==0.9.8
