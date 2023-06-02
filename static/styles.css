@@ -15,7 +15,10 @@ body{
 	/* background-color: rgba(0, 0, 0, 0.0); */
 }
 
-
+* {
+    /* box-sizing: border-box !important; */
+	overflow: hidden !important;
+}
 
 
 .grid{
@@ -26,7 +29,6 @@ body{
 	display: grid;
 	grid-template-rows: repeat(auto-fill, 4rem);
 	grid-template-columns: 1fr;
-
 	
 	margin-left: auto;
 	margin-right: auto;
@@ -55,9 +57,16 @@ body{
 	display: grid;
 	grid-template-rows: repeat(4, 4rem);
 
+	overflow: visible !important;
+
+	/* margin-left: auto; */
+	/* margin-right: auto; */
+	/* max-width: 720px; */
 }
 
-
+input{
+	padding: 0.5rem;
+}
 
 
 .row_2{
@@ -123,7 +132,6 @@ body{
 .btn{
 	transition: 0.4s;
 	transition-timing-function: ease-in-out;
-
 
 	animation-name: fadein_obj;
 	animation-duration: 666ms;
