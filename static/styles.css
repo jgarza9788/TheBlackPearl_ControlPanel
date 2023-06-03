@@ -4,15 +4,6 @@ body{
 	width: 100vw;
 	height: 100vh;
 	/* height: calc(100vh - 6rem); */
-
-	/* padding-top: 0rem; */
-	/* padding-bottom: 6rem;  */
-	/* transition: 0.5s; */
-	/* transition-timing-function: ease-in-out; */
-
-	/* animation-name: bodyanim; */
-	/* animation-duration: 5s; */
-	/* background-color: rgba(0, 0, 0, 0.0); */
 }
 
 * {
@@ -33,6 +24,8 @@ body{
 	margin-left: auto;
 	margin-right: auto;
 	max-width: 720px;
+
+	overflow: scroll !important;
 }
 
 .grid-item{
@@ -47,6 +40,8 @@ body{
 	margin-left: auto;
 	margin-right: auto;
 	max-width: 720px;
+
+	overflow: scroll !important;
 }
 
 .grid-form{
@@ -159,4 +154,16 @@ input{
 		opacity: 1.0;
 		scale: 1.00;
 	}
+}
+
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+*::-webkit-scrollbar {
+display: none;
+}
+  
+  /* Hide scrollbar for IE, Edge and Firefox */
+* {
+-ms-overflow-style: none;  /* IE and Edge */
+scrollbar-width: none;  /* Firefox */
 }
