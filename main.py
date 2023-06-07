@@ -1,7 +1,11 @@
 from flask import Flask, render_template, request, url_for, redirect, flash, send_from_directory
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
+# from pymongo import MongoClient
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
+
+# from flask_wtf import FlaskForm
+# from wtforms import TextField, IntegerField, SubmitField
 
 import shutil
 
@@ -9,19 +13,26 @@ import time,re
 from fuzzywuzzy import fuzz
 
 import Config
-SECRET_KEY = Config.Config().data["SECRET_KEY"]
+configdata = Config.Config().data
+SECRET_KEY = configdata["SECRET_KEY"]
 
 import os
 DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
 
-# run_with_ngrok(app)
+
 
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + DIR + '/instance/users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
+# app.config.update(dict(SECRET_KEY=SECRET_KEY))
+# client = MongoClient('localhost:27017') 
+# db = client.TBP
+
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -69,7 +80,13 @@ def VPN_Text(vpnbool:bool) -> str:
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+# def load_user(user):
+#     return db.users.find_one({'email': user['email']})
 
+# class User(FlaskForm):
+#     email = TextField('email')
+#     password = TextField('password')
+#     create = SubmitField('Login')
 
 ##CREATE TABLE
 class User(UserMixin, db.Model):
@@ -102,18 +119,6 @@ def get_files(root:str='D:\\',extensions:list=[]) -> list:
                 continue
     return result
 
-            
-# movies_files = get_files(root=r'D:\Torrents\Movies',extensions=['mkv','mp4'])
-# shows_files = get_files(root=r'D:\Torrents\Shows',extensions=['mkv','mp4'])
-# inprogress_files = get_files(root=r'D:\Torrents\InProgress',extensions=['mkv','mp4'])
-
-# app.config['ROOT_FOLDER'] = r'\\Theblackpearl\d\Torrents'
-# movies_files = get_files(root=r'\\Theblackpearl\d\Torrents\Movies',extensions=['mkv','mp4'])
-# shows_files = get_files(root=r'\\Theblackpearl\d\Torrents\Shows',extensions=['mkv','mp4'])
-# inprogress_files = get_files(root=r'\\Theblackpearl\d\Torrents\InProgress',extensions=['mkv','mp4'])
-
-# app.config['ROOT_FOLDER'] = r'D:\Comics'
-# movies_files = get_files(root=r'D:\Comics',extensions=['cbr','pdf'])
 
 ITEMS = []
 ITEMSTIME = 0.0
@@ -189,9 +194,10 @@ def home():
 #         db.session.add(new_user)
 #         db.session.commit()
 #         login_user(new_user)
-#         return redirect(url_for('index'))
+#         return redirect(url_for('controlpanel'))
 
 #     return render_template("register.html", logged_in=current_user.is_authenticated)
+
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -202,11 +208,16 @@ def login():
         password = request.form.get('password')
     
         user = User.query.filter_by(email=email).first()
+        print(user)
+        print(type(user))
+        # user = db.users.find_one({'email': email})
+
         #Email doesn't exist or password incorrect.
         if not user:
             flash("That email does not exist, please try again.")
             return redirect(url_for('login'))
         elif not check_password_hash(user.password, password):
+        # elif not check_password_hash(user['password'], password):
             flash('Password incorrect, please try again.')
             return redirect(url_for('login'))
         else:
@@ -222,7 +233,6 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-
 @app.route('/controlpanel')
 @login_required
 def controlpanel():
@@ -232,7 +242,7 @@ def controlpanel():
     
     return render_template(
         "controlpanel.html", 
-        name=current_user.name, 
+        email=current_user.email.replace('@',''), #don't pass in @
         logged_in=True,
         VPN_ON=VPN_ON
         )
@@ -295,8 +305,6 @@ def ITEMS_QUERY(query):
         item_list = pl
         )
 
-
-
 @app.route('/<category>/<fullpath>')
 @login_required
 def ITEM(category,fullpath):  
@@ -321,8 +329,11 @@ def download(fullpath):
 
     file = fullpath.split('\\')[-1]
 
+    flash('preparing file ...')
     path = os.path.join(DIR,'static','cache',file)
     shutil.copy2(fullpath,path)
+
+    flash('starting download')
 
     # return send_from_directory(app.config['ROOT_FOLDER'],path)
     return send_from_directory('static\cache',file, as_attachment=True)
@@ -378,17 +389,9 @@ def utility_processor():
     return dict(cos=cos, sin=sin, acos=acos)
 
 if __name__ == "__main__":
-    # print(*movies_files,sep='\n')
 
-    # app.run(debug=True, host= '192.168.1.254', port="8800")
-    # app.run(debug=True,port="8800")
-    # app.run(host='0.0.0.0',port=5000)
-    # app.run(host='192.168.1.200',port="8800")
-    # app.run(host='192.168.1.200',port="8800")
-    # app.run(debug=False,host='0.0.0.0',port="8800")
-    # app.run(host='0.0.0.0',port="8800",debug=False)
-    # app.run(host='192.168.1.223',port="5000")
-    app.run(host='0.0.0.0',port="5000",debug=True)
-    # app.run(host='0.0.0.0',port="8800",debug=False)
-    # app.run(host='192.168.1.200',port="8800",debug=False)
     # app.run()
+    # app.run(host='0.0.0.0',port="5000",debug=True)
+    app.run(host='0.0.0.0',port="8800",debug=False)
+    
+    

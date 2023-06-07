@@ -16,10 +16,11 @@ def main():
     except:
         pass
 
-    try:
-        os.remove(r'C:\Users\JGarza\Google Drive\TBP_link.txt')
-    except:
-        pass
+    # try:
+    #     os.remove(r'C:\Users\JGarza\Google Drive\TBP_link.txt')
+    #     os.remove(r'C:\Users\JGarza\Google Drive\TBP_link.md')
+    # except:
+    #     pass
     
     x = run_cmd('ngrok http 8800 --log=ngrok_log')
     time.sleep(5)
@@ -32,9 +33,13 @@ def main():
     link = re.findall('https:.*\.app\n',nlog)[0]
     link = link.replace('\n','')
     
-    with open(r'C:\Users\JGarza\Google Drive\TBP_link.txt','w') as file:
-        # file.write(f'# [TBP link]({link})')
-        file.write(f'{link}')
+    with open(r'C:\Users\JGarza\Google Drive\temp\TBP_link.txt','w') as file:
+        file.write(
+            f'''{link}
+user: guest@nothing.com
+password: JustAGuest
+            ''')
+        # file.write(f'{link}')
 
 
 if __name__ == "__main__":

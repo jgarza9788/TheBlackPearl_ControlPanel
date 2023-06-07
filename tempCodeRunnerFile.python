@@ -1,0 +1,49 @@
+from flask import Flask, render_template, request, url_for, redirect, flash, send_from_directory
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_sqlalchemy import SQLAlchemy
+# from pymongo import MongoClient
+from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
+
+from flask_wtf import FlaskForm
+from wtforms import TextField, IntegerField, SubmitField
+
+import shutil
+
+import time,re
+from fuzzywuzzy import fuzz
+
+import Config
+configdata = Config.Config().data
+SECRET_KEY = configdata["SECRET_KEY"]
+
+import os
+DIR = os.path.dirname(os.path.abspath(__file__))
+
+app = Flask(__name__)
+
+
+app.config['SECRET_KEY'] = SECRET_KEY
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + DIR + '/instance/users.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+##CREATE TABLE
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(100), unique=True)
+    password = db.Column(db.String(100))
+    name = db.Column(db.String(1000))
+
+with app.app_context():
+    db.create_all()
+
+user = User.query.filter_by(email='jgarza9788@gmail.com').first()
+print(user)
+print(type(user))

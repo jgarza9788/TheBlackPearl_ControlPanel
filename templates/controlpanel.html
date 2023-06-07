@@ -27,7 +27,9 @@
     ITEMS (MKV/MP4s)
     </div>
   </a>
-  
+
+  <!-- error when @ is in jinja... so @ was removed -->
+  {% if email == 'jgarza9788gmail.com' %}
   <a class="fs-5 rounded-6 shadow-5-strong btn btn-primary "  href="{{ url_for('VPN') }}">
     <!-- style="background-color: #F44336;"> -->
     <div class="w-100 h-100 d-flex align-items-center justify-content-center">
@@ -36,6 +38,7 @@
     VPN
     </div>
   </a>
+  {% endif %}
 
   <!-- 
   <button type="button" class="fixed-action-btn">
