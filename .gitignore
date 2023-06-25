@@ -6,6 +6,8 @@ __pycache__/
 /ngrok_setup.cmd
 /upsert_passwords.py
 
+/static/cache/*
+
 # C extensions
 *.so
 

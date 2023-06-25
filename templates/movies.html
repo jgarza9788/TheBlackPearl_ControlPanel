@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+
+
+<div class="files-grid mxw700">
+
+
+<script>
+    const FileModal = document.getElementById('FileModal')
+    if (FileModal) {
+    FileModal.addEventListener('show.bs.modal', event => {
+        // Button that triggered the modal
+        const button = event.relatedTarget
+        // Extract info from data-bs-* attributes
+        const file = button.getAttribute('data-bs-file')
+        const fullpath = button.getAttribute('data-bs-fullpath')
+        // If necessary, you could initiate an Ajax request here
+        // and then do the updating in a callback.
+
+        // Update the modal's content.
+        const modalTitle = FileModal.querySelector('.modal-title')
+        const modalBody = FileModal.querySelector('.modal-body')
+        const downloadbtn = FileModal.querySelector('#downloadbtn')
+
+        modalTitle.textContent = 'Download File?'
+        modalBody.innerHTML = 'file: '+ file + '<br/><br/>' + 'fullpath: ' + fullpath 
+        downloadbtn.href = '/download/' + encodeURIComponent(fullpath) 
+        
+    })
+    }
+</script>
+
+<script>
+
+  let s = document.getElementById("search-input");
+
+
+  $(document).ready(function(){
+      s = document.getElementById("search-input");
+
+  });
+
+
+  function focus_search(){
+      s.focus();
+  }
+
+  function clear_search(){
+      s.value = "";
+      window.location =  window.location.origin + "/movies"
+  }
+
+  function on_search(){
+      console.log(s.value);
+      console.log(window.location.origin + "/movies/" + s.value);
+      
+      setTimeout(function(){
+
+          window.location =  window.location.origin + "/movies/" + s.value;
+
+          }
+          ,500
+      );
+  }
+
+</script>
+
+<div class="search-box card-color row_4r1f"> 
+  <!-- <a onclick="focus_search()" class="btn btn-primary m-0 p-0 fs-1">
+    <i class="mdi mdi-magnify"></i>
+  </a> -->
+  <a href="{{ url_for('movies') }}" class="btn btn-secondary fs-1 icon-only">
+    <!-- <i class="mdi mdi-close-thick"></i> -->
+    <i class="bi bi-x"></i>
+    <!-- x -->
+  </a>
+  <!-- <a type="button" class="bg-secondary btn-close"></a> -->
+  <input id="search-input" class="search-input text-color rounded-3 border border-0" type="text" onchange="on_search()" value="{{query}}" />
+  <!-- <a onclick="clear_search()" class="btn btn-primary">
+    <i class="mdi mdi-close-thick"></i>
+  </a> -->
+</div>
+
+
+
+{% for item in item_list %}
+<button type="button" class="btn btn-primary text-truncate text-capitalize h4r" data-bs-toggle="modal" data-bs-target="#FileModal" data-bs-file="{{ item['file'] }}" data-bs-fullpath="{{ item['fullpath'] }}">
+  <div class="fs-5 text-start">
+    {{ item['file'] }}
+  </div>
+  <div class="fs-10 text-white-50 text-start">
+    {{ item['fullpath'] }}
+  </div>
+</button>
+<!-- 
+<a class="h4rem fs-5 rounded-6 shadow-5-strong btn btn-primary " href="{{ url_for('download',fullpath=item['fullpath'])}}">   
+  <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+    <i class="fas fa-download"></i>
+    <div class="space"></div> 
+    DOWNLOAD
+  </div>
+</a> -->
+
+{% endfor %}
+
+
+</div>
+
+
+
+
+{% endblock %}
+
+

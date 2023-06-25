@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+
+<style>
+    .anim-effect-green:focus{
+  transition-duration: 0.3s;
+  box-shadow: 0px 0px 5px #0d6efd;
+  color:#ffffff !important;
+}
+
+.anim-green{
+  transition: all 0.1s;
+  box-shadow: 0px 0px 2px #ffffff;
+  color: #ffffff !important;
+  
+  animation-name: anim-green-kf;
+  animation-duration: 0.50s;
+  animation-timing-function: ease-out;
+  animation-iteration-count: 1;
+}
+
+@keyframes anim-green-kf {
+  0% {
+    box-shadow: 0px 0px 0px transparent;
+    color:#0d6efd !important;
+  }
+  1% {
+    box-shadow: 0px 0px 1px #0d6efd;
+    color:#0d6efd !important;
+  }
+  50% {
+    box-shadow: 0px 0px 100px #0d6efd;
+    color:#0d6efd !important;
+  }
+  100% {
+    box-shadow: 0px 0px 200px transparent;
+    color: white !important;
+  }
+ 
+}
+</style>
+
+
+<script>
+    $(document).ready(function(){
+
+        $('.anim-effect-green').click(function(event) {
+
+        var button = $(event.target);
+        console.log(button);
+        button.addClass('anim-green');
+
+        setTimeout(function(){
+            button.removeClass('anim-green');
+        }, 600);
+        });
+
+    })
+    
+</script>
+
+
+<div class="vpn-grid mxw700">
+<button class="btn text-whitex anim-effect-green"> Hello </button>
+<button class="btn text-whitex anim-effect-green"> Hello </button>
+<button class="btn text-whitex anim-effect-green"> Hello </button>
+</div>
+
+
+{% endblock %}
+
+

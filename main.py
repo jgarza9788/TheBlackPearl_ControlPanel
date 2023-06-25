@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, url_for, redirect, flash, send_from_directory
+from flask import Flask, render_template, request, jsonify, url_for, redirect, flash, send_from_directory
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 # from pymongo import MongoClient
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
+
 
 # from flask_wtf import FlaskForm
 # from wtforms import TextField, IntegerField, SubmitField
@@ -21,17 +22,15 @@ DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
 
-
-
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + DIR + '/instance/users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
+
 # app.config.update(dict(SECRET_KEY=SECRET_KEY))
 # client = MongoClient('localhost:27017') 
 # db = client.TBP
-
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -75,7 +74,6 @@ def VPN_Text(vpnbool:bool) -> str:
 
 
 ############################################
-
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -142,7 +140,6 @@ def get_items():
 
 ############################################
 
-
 def clear_cache():
     static_cache = os.path.join(DIR,'static','cache')
     listdir = os.listdir(static_cache)
@@ -158,7 +155,13 @@ def clear_cache():
 @app.route('/')
 def home():
     if current_user.is_authenticated:
-        return redirect(url_for('controlpanel'))
+
+        # print(request.endpoint)
+        return render_template(
+            "home.html", 
+            logged_in=current_user.is_authenticated,
+            title=request.endpoint
+            )
     else:
         return redirect(url_for('login'))
 
@@ -170,7 +173,6 @@ def home():
     #         vpn_status=VPN_Text(VPN_ON)
     #         )
     # return render_template("index.html", logged_in=current_user.is_authenticated)
-
 
 # @app.route('/register', methods=["GET", "POST"])
 # def register():
@@ -202,6 +204,7 @@ def home():
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
+    # print(request.endpoint)
 
     if request.method == "POST":
         email = request.form.get('email')
@@ -214,116 +217,172 @@ def login():
 
         #Email doesn't exist or password incorrect.
         if not user:
-            flash("That email does not exist, please try again.")
+            flash("That email does not exist, please try again.",'error')
             return redirect(url_for('login'))
         elif not check_password_hash(user.password, password):
         # elif not check_password_hash(user['password'], password):
-            flash('Password incorrect, please try again.')
+            flash('Password incorrect, please try again.','error')
             return redirect(url_for('login'))
         else:
             login_user(user)
-            return redirect(url_for('controlpanel'))
+            return redirect(url_for('home'))
             # return redirect(url_for('home'))
 
-    return render_template("login.html", logged_in=current_user.is_authenticated)
+    return render_template(
+        "login.html", 
+        logged_in=current_user.is_authenticated,
+        title=request.endpoint
+        )
 
 @app.route('/logout')
 # @login_required
 def logout():
+    # print(request.endpoint)
     logout_user()
     return redirect(url_for('login'))
 
-@app.route('/controlpanel')
-@login_required
-def controlpanel():
+# @app.route('/controlpanel')
+# @login_required
+# def About():
 
-    if current_user.is_authenticated == False:
-        return redirect(url_for('login'))
+#     if current_user.is_authenticated == False:
+#         return redirect(url_for('login'))
     
-    return render_template(
-        "controlpanel.html", 
-        email=current_user.email.replace('@',''), #don't pass in @
-        logged_in=True,
-        VPN_ON=VPN_ON
-        )
+#     return render_template(
+#         "About.html", 
+#         logged_in=current_user.is_authenticated,
+#         title='\About'
+#         )
 
 
-# files0 #
+# MOVIES
 
-@app.route('/ITEMS')
+MOVIE_LIST = []
+MOVIE_TS = 0.0
+
+@app.route('/movies')
 @login_required
-def ITEMS():  
+def movies():  
+    global MOVIE_LIST
+    global MOVIE_TS
 
     if current_user.is_authenticated == False:
         return redirect(url_for('login'))
 
-    items = get_items()
+    if (time.time() - MOVIE_TS) > 60*10:
+        MOVIE_LIST = get_files(root=r'D:\Torrents\Movies',extensions=['mkv','mp4'])
+        if len(MOVIE_LIST) == 0:
+            MOVIE_LIST += get_files(root=r'\\Theblackpearl\d\Torrents\Movies',extensions=['mkv','mp4'])
+        MOVIE_TS = time.time()
 
+    
     clear_cache()
     return render_template(
-        "ITEM_LIST.html", 
-        name=current_user.name, 
-        logged_in=True,
-        title = 'ITEMS',
-        category='ITEMS',
-        item_list = items[0:25]
+        "movies.html", 
+        title=request.endpoint,
+        logged_in=current_user.is_authenticated,
+        item_list=MOVIE_LIST
         )
 
-@app.route("/ITEMSQ/<query>", methods=['GET', 'POST'])
-@login_required
-def ITEMS_QUERY(query):
-
-    if current_user.is_authenticated == False:
-        return redirect(url_for('login'))
+@app.route("/movies/<query>", methods=['GET', 'POST'])
+def movies_query(query):
+    global MOVIE_LIST
 
     print(query)
 
     if len(query) < 2:
-        return redirect(url_for("ITEMS"))
+        return redirect(url_for("movies"))
 
     query = query.lower()
 
-    pl = []
-    for i in get_items():
+    filtered = []
+    for i in MOVIE_LIST:
         if query in str(i).lower():
-            pl.append(i)
+            filtered.append(i)
         else:
             temp = re.sub(r'[^A-Za-z]+',',',str(i).lower())
             for w in re.split(',',temp):
                 # print(w)
                 if fuzz.ratio(query, w) > 85:
-                    pl.append(i)
+                    filtered.append(i)
                     break;
     
-    # return render_template("portfolio.html",portfolio_data=pl,query=query)
+    # return render_template("movies.html",portfolio_data=pl,query=query)
     return render_template(
-        "ITEM_LIST.html", 
-        name=current_user.name, 
-        logged_in=True,
-        title = 'Query',
-        category='ITEMS',
-        item_list = pl
+        "movies.html", 
+        title=request.endpoint,
+        logged_in=current_user.is_authenticated,
+        item_list=filtered
         )
 
-@app.route('/<category>/<fullpath>')
+# SHOWS 
+
+SHOWS_LIST = []
+SHOWS_TS = 0.0
+
+@app.route('/shows')
 @login_required
-def ITEM(category,fullpath):  
+def shows():  
+    global SHOWS_LIST
+    global SHOWS_TS
 
     if current_user.is_authenticated == False:
         return redirect(url_for('login'))
-  
-    print(category,fullpath)
+
+    if (time.time() - SHOWS_TS) > 60*10:
+        SHOWS_LIST = get_files(root=r'D:\Torrents\Shows',extensions=['mkv','mp4'])
+        if len(SHOWS_LIST) == 0:
+            SHOWS_LIST += get_files(root=r'\\Theblackpearl\d\Torrents\Shows',extensions=['mkv','mp4'])
+        SHOWS_TS = time.time()
+
+    
+    clear_cache()
     return render_template(
-        "ITEM.html", 
-        name=current_user.name, 
-        logged_in=True,
-        category = category,
-        item = fullpath
+        "shows.html", 
+        title=request.endpoint,
+        logged_in=current_user.is_authenticated,
+        item_list=SHOWS_LIST
         )
 
-@app.route('/download/<fullpath>')
+@app.route("/shows/<query>", methods=['GET', 'POST'])
+def shows_query(query):
+    global SHOWS_LIST
+
+    print(query)
+
+    if len(query) < 2:
+        return redirect(url_for("shows"))
+
+    query = query.lower()
+
+    filtered = []
+    for i in SHOWS_LIST:
+        if query in str(i).lower():
+            filtered.append(i)
+        else:
+            temp = re.sub(r'[^A-Za-z]+',',',str(i).lower())
+            for w in re.split(',',temp):
+                # print(w)
+                if fuzz.ratio(query, w) > 85:
+                    filtered.append(i)
+                    break;
+    
+    # return render_template("movies.html",portfolio_data=pl,query=query)
+    return render_template(
+        "shows.html", 
+        title=request.endpoint,
+        logged_in=current_user.is_authenticated,
+        item_list=filtered
+        )
+
+# COMICS
+
+
+@app.route('/download/<fullpath>',methods=['GET'])
 @login_required
-def download(fullpath):    
+def download(fullpath):  
+    print(fullpath)  
+
     if current_user.is_authenticated == False:
         return redirect(url_for('login'))
 
@@ -342,7 +401,7 @@ def download(fullpath):
 
 @app.route('/VPN')
 @login_required
-def VPN():    
+def VPN():       
     if current_user.is_authenticated == False:
         return redirect(url_for('login'))
     
@@ -350,36 +409,50 @@ def VPN():
 
     return render_template(
         "VPN.html", 
-        name=current_user.name, 
-        logged_in=True,
+        title=request.endpoint,
+        logged_in=current_user.is_authenticated,
         VPN_ON=VPN_ON
         )
 
-@app.route('/activateVPN')
+# @app.route('/activateVPN')
+@app.route('/activateVPN',methods=['POST'])
 @login_required
 def activateVPN():
     if current_user.is_authenticated == False:
         return redirect(url_for('login'))
     
     os.startfile(r"C:\Users\JGarza\GitHub\VPNTools\activate_VPN_close.cmd")
-    return redirect(url_for('VPN'))
 
-@app.route('/killVPN')
+    VPN_ON = VPN_running()
+    # return redirect(url_for('VPN'))
+    return jsonify({'result':'Successful','VPN_ON':VPN_ON})
+
+
+# @app.route('/killVPN')
+@app.route('/killVPN',methods=['POST'])
 @login_required
 def killVPN():
     if current_user.is_authenticated == False:
         return redirect(url_for('login'))
     
     os.startfile(r"C:\Users\JGarza\GitHub\VPNTools\kill_VPN_close.cmd")
-    return redirect(url_for('VPN'))
 
-@app.route('/getVPNstatus')
+    VPN_ON = VPN_running()
+    # return redirect(url_for('VPN'))
+    return jsonify({'result':'Successful','VPN_ON':VPN_ON})
+
+
+@app.route('/getVPNstatus',methods=['POST'])
+# @app.route('/getVPNstatus')
 @login_required
 def getVPNstatus():
     if current_user.is_authenticated == False:
         return redirect(url_for('login'))
-    
-    return redirect(url_for('VPN'))
+    # LOCS.append(request.endpoint)
+    VPN_ON = VPN_running()
+    # return redirect(url_for('VPN'))
+    return jsonify({'result':'Successful','VPN_ON':VPN_ON})
+
 
 
 from math import sin, cos, acos
@@ -388,10 +461,13 @@ from math import sin, cos, acos
 def utility_processor():
     return dict(cos=cos, sin=sin, acos=acos)
 
+
 if __name__ == "__main__":
 
     # app.run()
-    # app.run(host='0.0.0.0',port="5000",debug=True)
-    app.run(host='0.0.0.0',port="8800",debug=False)
+    app.run(host='0.0.0.0',port="5000",debug=True)
+    # app.run(host='0.0.0.0',port="8800",debug=False)
+
+
     
     

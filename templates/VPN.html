@@ -2,68 +2,117 @@
 {% block content %}
 
 
-<div class="grid">
 
-  <div class="row_2h">
-    <a class="fs-5 rounded-6 shadow-0-strong btn btn-dark"  href="{{ url_for('controlpanel') }}">
-      <div class="w-100 h-100 d-flex align-items-center justify-content-center">
-        <i class="fas fa-arrow-left-long"></i>
-        <!-- <div class="space"></div>  -->
-        <!-- Back -->
-      </div>
-    </a>
-    <div class="head text-white text-center fs-1">
-      <div class="w-100 h-100 d-flex align-items-center justify-content-center">
-        <i class="fas fa-skull-crossbones"></i>
-        <div class="space"></div> 
-        \ VPN
-      </div>
-    </div>
-  </div>
+<script>
+  $(document).ready(function() {
+      $('#getVPNstatus').click(function() {
+          $.ajax({
+              url: '/getVPNstatus',
+              type: 'POST',
+              success: function(response) {
+                  console.log('Success:',response);
+                  updateVPNStatus(response);
+              },
+              error: function(error) {
+                  console.log('Error:', error);
+              }
+          });
+      });
 
-  <a class="fs-5 rounded-6 shadow-0-strong btn btn-dark"  href="{{ url_for('getVPNstatus') }}"> <!-- style="background-color: #2962FF;"> -->
-    
+      $('#REVPN').click(function() {
+          $.ajax({
+              url: '/activateVPN',
+              type: 'POST',
+              success: function(response) {
+                  console.log('Success:',response);
+                  updateVPNStatus(response);
+              },
+              error: function(error) {
+                  console.log('Error:', error);
+              }
+          });
+      });
+
+      $('#KILLVPN').click(function() {
+          $.ajax({
+              url: '/killVPN',
+              type: 'POST',
+              success: function(response) {
+                  console.log('Success:',response);
+                  updateVPNStatus(response);
+              },
+              error: function(error) {
+                  console.log('Error:', error);
+              }
+          });
+      });
+  });
+
+  function updateVPNStatus(response)
+  {
+    console.log('updateVPNStatus();');
+    var VPNON = document.getElementById("VPNON");
+    var VPNOFF = document.getElementById("VPNOFF");
+    if (response.VPN_ON == true)
+    {
+      VPNON.classList.remove('d-none');
+      VPNOFF.classList.add('d-none');
+    }
+    else
+    {
+      VPNON.classList.add('d-none');
+      VPNOFF.classList.remove('d-none');
+    }
+  }
+
+</script> 
+
+
+
+<div class="vpn-grid mxw700">
+  <a class="fs-2 rounded-6 shadow-0-strong btn btn-dark" id="getVPNstatus" >
+  <!-- href="{{ url_for('getVPNstatus') }}">  -->
+      
     {% if VPN_ON %}
 
-    <div class="w-100 h-100 text-success d-flex align-items-center justify-content-center">
-      VPN Status:
-      <div class="space"></div>
-      <i class="fas fa-circle-check"></i> 
-      <div class="space"></div>
-      ON
+    <div id="VPNON" class="w-100 h-100 text-success d-flex align-items-center justify-content-center">
+      VPN Status: ON
+    </div>
+    <div id="VPNOFF" class="w-100 h-100 text-danger d-flex align-items-center d-none justify-content-center">
+      VPN Status: OFF
     </div>
 
     {% else %}
 
-    <div class="w-100 h-100 text-danger d-flex align-items-center justify-content-center">
-      VPN Status:
-      <div class="space"></div>
-      <i class="fas fa-circle-xmark"></i> 
-      <div class="space"></div>
-      OFF
+    <div id="VPNON" class="w-100 h-100 text-success d-flex align-items-center d-none justify-content-center">
+      VPN Status: ON
+    </div>
+    <div id="VPNOFF" class="w-100 h-100 text-danger d-flex align-items-center justify-content-center">
+      VPN Status: OFF
     </div>
 
     {% endif %}
 
   </a>
 
-  <a class="fs-5 rounded-6 shadow-5-strong btn "  href="{{ url_for('activateVPN') }}" style="background-color: #1B5E20;">
+  <a id="REVPN" class="fs-2 rounded-6 shadow-5-strong btn btn-success" >
+      <!-- href="{{ url_for('activateVPN') }}" style="background-color: #1B5E20;"> -->
     <div class="w-100 h-100 text-white d-flex align-items-center justify-content-center">
-    <i class="fas fa-shield"></i>
+    <i class="mdi mdi-shield-sync"></i>
     <div class="space"></div>
     re-VPN
     </div>
   </a>
 
-  <a class="fs-5 rounded-6 shadow-5-strong btn "  href="{{ url_for('killVPN') }}" style="background-color: #F44336;">
+  <a id="KILLVPN" class="fs-2 rounded-6 shadow-5-strong btn btn-danger ">
+    <!-- href="{{ url_for('killVPN') }}" style="background-color: #F44336;"> -->
     <div class="w-100 h-100 text-white d-flex align-items-center justify-content-center">
-    <i class="fas fa-skull"></i>
+    <i class="mdi mdi-skull-crossbones"></i>
     <div class="space"></div>
     kill-VPN
     </div>
   </a>
-
 </div>
 
-
 {% endblock %}
+
