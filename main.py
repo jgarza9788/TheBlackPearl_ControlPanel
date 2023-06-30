@@ -13,9 +13,13 @@ import shutil
 import time,re
 from fuzzywuzzy import fuzz
 
+
+
 import Config
 configdata = Config.Config().data
 SECRET_KEY = configdata["SECRET_KEY"]
+
+from drivedata import get_drivedata
 
 import os
 DIR = os.path.dirname(os.path.abspath(__file__))
@@ -156,11 +160,14 @@ def clear_cache():
 def home():
     if current_user.is_authenticated:
 
+        drivedata = get_drivedata()
+
         # print(request.endpoint)
         return render_template(
             "home.html", 
             logged_in=current_user.is_authenticated,
-            title=request.endpoint
+            title=request.endpoint,
+            drivedata=drivedata
             )
     else:
         return redirect(url_for('login'))
@@ -255,10 +262,23 @@ def logout():
 #         )
 
 
+
+
 # MOVIES
 
 MOVIE_LIST = []
 MOVIE_TS = 0.0
+
+def get_movies():
+    global MOVIE_LIST
+    global MOVIE_TS
+
+    if (time.time() - MOVIE_TS) > 60*10:
+        MOVIE_LIST = get_files(root=r'D:\Torrents\Movies',extensions=['mkv','mp4'])
+        if len(MOVIE_LIST) == 0:
+            MOVIE_LIST += get_files(root=r'\\Theblackpearl\d\Torrents\Movies',extensions=['mkv','mp4'])
+        MOVIE_TS = time.time()
+get_movies()
 
 @app.route('/movies')
 @login_required
@@ -269,12 +289,7 @@ def movies():
     if current_user.is_authenticated == False:
         return redirect(url_for('login'))
 
-    if (time.time() - MOVIE_TS) > 60*10:
-        MOVIE_LIST = get_files(root=r'D:\Torrents\Movies',extensions=['mkv','mp4'])
-        if len(MOVIE_LIST) == 0:
-            MOVIE_LIST += get_files(root=r'\\Theblackpearl\d\Torrents\Movies',extensions=['mkv','mp4'])
-        MOVIE_TS = time.time()
-
+    get_movies()
     
     clear_cache()
     return render_template(
@@ -320,6 +335,17 @@ def movies_query(query):
 SHOWS_LIST = []
 SHOWS_TS = 0.0
 
+def get_shows():
+    global SHOWS_LIST
+    global SHOWS_TS
+    
+    if (time.time() - SHOWS_TS) > 60*10:
+        SHOWS_LIST = get_files(root=r'D:\Torrents\Shows',extensions=['mkv','mp4'])
+        if len(SHOWS_LIST) == 0:
+            SHOWS_LIST += get_files(root=r'\\Theblackpearl\d\Torrents\Shows',extensions=['mkv','mp4'])
+        SHOWS_TS = time.time()
+get_shows()
+
 @app.route('/shows')
 @login_required
 def shows():  
@@ -329,13 +355,8 @@ def shows():
     if current_user.is_authenticated == False:
         return redirect(url_for('login'))
 
-    if (time.time() - SHOWS_TS) > 60*10:
-        SHOWS_LIST = get_files(root=r'D:\Torrents\Shows',extensions=['mkv','mp4'])
-        if len(SHOWS_LIST) == 0:
-            SHOWS_LIST += get_files(root=r'\\Theblackpearl\d\Torrents\Shows',extensions=['mkv','mp4'])
-        SHOWS_TS = time.time()
+    get_shows()
 
-    
     clear_cache()
     return render_template(
         "shows.html", 
@@ -397,61 +418,60 @@ def download(fullpath):
     # return send_from_directory(app.config['ROOT_FOLDER'],path)
     return send_from_directory('static\cache',file, as_attachment=True)
 
-# VPN #
-
-@app.route('/VPN')
-@login_required
-def VPN():       
-    if current_user.is_authenticated == False:
-        return redirect(url_for('login'))
+## VPN #
+# @app.route('/VPN')
+# @login_required
+# def VPN():       
+#     if current_user.is_authenticated == False:
+#         return redirect(url_for('login'))
     
-    VPN_ON = VPN_running()
+#     VPN_ON = VPN_running()
 
-    return render_template(
-        "VPN.html", 
-        title=request.endpoint,
-        logged_in=current_user.is_authenticated,
-        VPN_ON=VPN_ON
-        )
+#     return render_template(
+#         "VPN.html", 
+#         title=request.endpoint,
+#         logged_in=current_user.is_authenticated,
+#         VPN_ON=VPN_ON
+#         )
 
-# @app.route('/activateVPN')
-@app.route('/activateVPN',methods=['POST'])
-@login_required
-def activateVPN():
-    if current_user.is_authenticated == False:
-        return redirect(url_for('login'))
+# # @app.route('/activateVPN')
+# @app.route('/activateVPN',methods=['POST'])
+# @login_required
+# def activateVPN():
+#     if current_user.is_authenticated == False:
+#         return redirect(url_for('login'))
     
-    os.startfile(r"C:\Users\JGarza\GitHub\VPNTools\activate_VPN_close.cmd")
+#     os.startfile(r"C:\Users\JGarza\GitHub\VPNTools\activate_VPN_close.cmd")
 
-    VPN_ON = VPN_running()
-    # return redirect(url_for('VPN'))
-    return jsonify({'result':'Successful','VPN_ON':VPN_ON})
+#     VPN_ON = VPN_running()
+#     # return redirect(url_for('VPN'))
+#     return jsonify({'result':'Successful','VPN_ON':VPN_ON})
 
 
-# @app.route('/killVPN')
-@app.route('/killVPN',methods=['POST'])
-@login_required
-def killVPN():
-    if current_user.is_authenticated == False:
-        return redirect(url_for('login'))
+# # @app.route('/killVPN')
+# @app.route('/killVPN',methods=['POST'])
+# @login_required
+# def killVPN():
+#     if current_user.is_authenticated == False:
+#         return redirect(url_for('login'))
     
-    os.startfile(r"C:\Users\JGarza\GitHub\VPNTools\kill_VPN_close.cmd")
+#     os.startfile(r"C:\Users\JGarza\GitHub\VPNTools\kill_VPN_close.cmd")
 
-    VPN_ON = VPN_running()
-    # return redirect(url_for('VPN'))
-    return jsonify({'result':'Successful','VPN_ON':VPN_ON})
+#     VPN_ON = VPN_running()
+#     # return redirect(url_for('VPN'))
+#     return jsonify({'result':'Successful','VPN_ON':VPN_ON})
 
 
-@app.route('/getVPNstatus',methods=['POST'])
-# @app.route('/getVPNstatus')
-@login_required
-def getVPNstatus():
-    if current_user.is_authenticated == False:
-        return redirect(url_for('login'))
-    # LOCS.append(request.endpoint)
-    VPN_ON = VPN_running()
-    # return redirect(url_for('VPN'))
-    return jsonify({'result':'Successful','VPN_ON':VPN_ON})
+# @app.route('/getVPNstatus',methods=['POST'])
+# # @app.route('/getVPNstatus')
+# @login_required
+# def getVPNstatus():
+#     if current_user.is_authenticated == False:
+#         return redirect(url_for('login'))
+#     # LOCS.append(request.endpoint)
+#     VPN_ON = VPN_running()
+#     # return redirect(url_for('VPN'))
+#     return jsonify({'result':'Successful','VPN_ON':VPN_ON})
 
 
 

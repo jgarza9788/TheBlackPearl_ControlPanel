@@ -4,7 +4,7 @@
 
 
 
-<div class="files-grid mxw700">
+<div class="files-grid mxw500">
 
 
 <script>
@@ -67,17 +67,19 @@
 
 </script>
 
-<div class="search-box card-color row_4r1f"> 
+
+<div class="search-box card-color"> 
   <!-- <a onclick="focus_search()" class="btn btn-primary m-0 p-0 fs-1">
     <i class="mdi mdi-magnify"></i>
   </a> -->
-  <a href="{{ url_for('movies') }}" class="btn btn-secondary fs-1 icon-only">
+  <a href="{{ url_for('movies') }}" class="btn btn-secondary fs-4 icon-only w-100 h-100">
     <!-- <i class="mdi mdi-close-thick"></i> -->
-    <i class="bi bi-x"></i>
+    <!-- <i class="bi bi-x"></i> -->
+    <i class="nf nf-cod-close"></i>
     <!-- x -->
   </a>
   <!-- <a type="button" class="bg-secondary btn-close"></a> -->
-  <input id="search-input" class="search-input text-color rounded-3 border border-0" type="text" onchange="on_search()" value="{{query}}" />
+  <input id="search-input" class="search-input text-color rounded-3 border border-0 w-100 h-100" type="text" onchange="on_search()" value="{{query}}" />
   <!-- <a onclick="clear_search()" class="btn btn-primary">
     <i class="mdi mdi-close-thick"></i>
   </a> -->
@@ -87,10 +89,10 @@
 
 {% for item in item_list %}
 <button type="button" class="btn btn-primary text-truncate text-capitalize h4r" data-bs-toggle="modal" data-bs-target="#FileModal" data-bs-file="{{ item['file'] }}" data-bs-fullpath="{{ item['fullpath'] }}">
-  <div class="fs-5 text-start">
+  <div class="fs-5 text-blackx text-start">
     {{ item['file'] }}
   </div>
-  <div class="fs-10 text-white-50 text-start">
+  <div class="fs-10 text-white-50 text-black-50x text-start">
     {{ item['fullpath'] }}
   </div>
 </button>
