@@ -22,7 +22,7 @@ def main():
     # except:
     #     pass
     
-    x = run_cmd('ngrok http 8800 --log=ngrok_log')
+    x = run_cmd(r'.\utils\ngrok\ngrok http 8800 --log=ngrok_log')
     time.sleep(5)
 
     nlog = ''

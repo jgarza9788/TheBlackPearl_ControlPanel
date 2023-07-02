@@ -68,41 +68,21 @@
 </script>
 
 <div class="search-box card-color"> 
-  <!-- <a onclick="focus_search()" class="btn btn-primary m-0 p-0 fs-1">
-    <i class="mdi mdi-magnify"></i>
-  </a> -->
   <a href="{{ url_for('shows') }}" class="btn btn-secondary fs-4 icon-only w-100 h-100">
-    <!-- <i class="mdi mdi-close-thick"></i> -->
-    <!-- <i class="bi bi-x"></i> -->
     <i class="nf nf-cod-close"></i>
-    <!-- x -->
   </a>
-  <!-- <a type="button" class="bg-secondary btn-close"></a> -->
   <input id="search-input" class="search-input text-color rounded-3 border border-0 w-100 h-100" type="text" onchange="on_search()" value="{{query}}" />
-  <!-- <a onclick="clear_search()" class="btn btn-primary">
-    <i class="mdi mdi-close-thick"></i>
-  </a> -->
 </div>
-
-
 
 {% for item in item_list %}
 <button type="button" class="btn btn-primary text-truncate text-capitalize h4r" data-bs-toggle="modal" data-bs-target="#FileModal" data-bs-file="{{ item['file'] }}" data-bs-fullpath="{{ item['fullpath'] }}">
-  <div class="fs-5 text-start">
+  <div class="text-start filename">
     {{ item['file'] }}
   </div>
-  <div class="fs-10 text-white-50 text-start">
+  <div class="text-start fullpath">
     {{ item['fullpath'] }}
   </div>
 </button>
-<!-- 
-<a class="h4rem fs-5 rounded-6 shadow-5-strong btn btn-primary " href="{{ url_for('download',fullpath=item['fullpath'])}}">   
-  <div class="w-100 h-100 d-flex align-items-center justify-content-center">
-    <i class="fas fa-download"></i>
-    <div class="space"></div> 
-    DOWNLOAD
-  </div>
-</a> -->
 
 {% endfor %}
 

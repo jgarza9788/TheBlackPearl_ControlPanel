@@ -10,10 +10,10 @@ from flask_login import UserMixin, login_user, LoginManager, login_required, cur
 
 import shutil
 
+from threading import Thread
+
 import time,re
 from fuzzywuzzy import fuzz
-
-
 
 import Config
 configdata = Config.Config().data
@@ -52,29 +52,23 @@ def run_cmd(cmd):
     return subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
 
 
-def VPN_running():
-    # return True
+# def VPN_running():
+#     # return True
+#     rc = run_cmd("tasklist")
+#     rc = str(rc.stdout.read())
+#     status = False
+#     for p in vpn_programs:
+#         if p in rc:
+#             status = True
+#     return status
 
-    rc = run_cmd("tasklist")
+# VPN_ON = VPN_running()
 
-    rc = str(rc.stdout.read())
-    
-    status = False
-
-    for p in vpn_programs:
-        if p in rc:
-            status = True
-    
-    return status
-
-
-VPN_ON = VPN_running()
-
-def VPN_Text(vpnbool:bool) -> str:
-    if vpnbool:
-        return 'Running'
-    else:
-        return 'Is Off'
+# def VPN_Text(vpnbool:bool) -> str:
+#     if vpnbool:
+#         return 'Running'
+#     else:
+#         return 'Is Off'
 
 
 ############################################
@@ -121,26 +115,6 @@ def get_files(root:str='D:\\',extensions:list=[]) -> list:
                 continue
     return result
 
-
-ITEMS = []
-ITEMSTIME = 0.0
-def get_items():
-    global ITEMS
-    global ITEMSTIME
-
-    if (time.time() - ITEMSTIME) > 3600:
-        ITEMS = get_files(root=r'D:\Torrents\Movies',extensions=['mkv','mp4'])
-        ITEMS += get_files(root=r'D:\Torrents\Shows',extensions=['mkv','mp4'])
-
-        if len(ITEMS) == 0:
-            ITEMS += get_files(root=r'\\Theblackpearl\d\Torrents\Movies',extensions=['mkv','mp4'])
-            ITEMS += get_files(root=r'\\Theblackpearl\d\Torrents\Shows',extensions=['mkv','mp4']) 
-
-        ITEMSTIME = time.time()
-    
-    return ITEMS
-
-# items = get_items()
 
 ############################################
 
@@ -261,24 +235,47 @@ def logout():
 #         title='\About'
 #         )
 
+MOVIE_LIST = []
+SHOWS_LIST = []
+TIMESTAMP = 0.0
 
 
+def update_lists():
+    '''
+    updates the lists every hour
+    '''
+    global MOVIE_LIST
+    global SHOWS_LIST
+    global TIMESTAMP
+
+    while 1==1:
+        if (time.time() - TIMESTAMP) > 60*60: 
+            print(time.time(),'updating lists')
+            MOVIE_LIST = get_files(root=r'D:\Torrents\Movies',extensions=['mkv','mp4'])
+            if len(MOVIE_LIST) == 0:
+                MOVIE_LIST += get_files(root=r'\\Theblackpearl\d\Torrents\Movies',extensions=['mkv','mp4'])
+            SHOWS_LIST = get_files(root=r'D:\Torrents\Shows',extensions=['mkv','mp4'])
+            if len(SHOWS_LIST) == 0:
+                SHOWS_LIST += get_files(root=r'\\Theblackpearl\d\Torrents\Shows',extensions=['mkv','mp4'])
+            time.sleep(60) # every hour
+            TIMESTAMP = time.time()
+Thread(name='update_lists',target=update_lists,args=[]).start()
 
 # MOVIES
 
-MOVIE_LIST = []
-MOVIE_TS = 0.0
+# MOVIE_LIST = []
+# MOVIE_TS = 0.0
 
-def get_movies():
-    global MOVIE_LIST
-    global MOVIE_TS
+# def get_movies():
+#     global MOVIE_LIST
+#     global MOVIE_TS
 
-    if (time.time() - MOVIE_TS) > 60*10:
-        MOVIE_LIST = get_files(root=r'D:\Torrents\Movies',extensions=['mkv','mp4'])
-        if len(MOVIE_LIST) == 0:
-            MOVIE_LIST += get_files(root=r'\\Theblackpearl\d\Torrents\Movies',extensions=['mkv','mp4'])
-        MOVIE_TS = time.time()
-get_movies()
+#     if (time.time() - MOVIE_TS) > 60*10:
+#         MOVIE_LIST = get_files(root=r'D:\Torrents\Movies',extensions=['mkv','mp4'])
+#         if len(MOVIE_LIST) == 0:
+#             MOVIE_LIST += get_files(root=r'\\Theblackpearl\d\Torrents\Movies',extensions=['mkv','mp4'])
+#         MOVIE_TS = time.time()
+# get_movies()
 
 @app.route('/movies')
 @login_required
@@ -289,14 +286,14 @@ def movies():
     if current_user.is_authenticated == False:
         return redirect(url_for('login'))
 
-    get_movies()
+    # get_movies()
     
     clear_cache()
     return render_template(
         "movies.html", 
         title=request.endpoint,
         logged_in=current_user.is_authenticated,
-        item_list=MOVIE_LIST
+        item_list=MOVIE_LIST[0:25]
         )
 
 @app.route("/movies/<query>", methods=['GET', 'POST'])
@@ -332,19 +329,19 @@ def movies_query(query):
 
 # SHOWS 
 
-SHOWS_LIST = []
-SHOWS_TS = 0.0
+# SHOWS_LIST = []
+# SHOWS_TS = 0.0
 
-def get_shows():
-    global SHOWS_LIST
-    global SHOWS_TS
+# def get_shows():
+#     global SHOWS_LIST
+#     global SHOWS_TS
     
-    if (time.time() - SHOWS_TS) > 60*10:
-        SHOWS_LIST = get_files(root=r'D:\Torrents\Shows',extensions=['mkv','mp4'])
-        if len(SHOWS_LIST) == 0:
-            SHOWS_LIST += get_files(root=r'\\Theblackpearl\d\Torrents\Shows',extensions=['mkv','mp4'])
-        SHOWS_TS = time.time()
-get_shows()
+#     if (time.time() - SHOWS_TS) > 60*10:
+#         SHOWS_LIST = get_files(root=r'D:\Torrents\Shows',extensions=['mkv','mp4'])
+#         if len(SHOWS_LIST) == 0:
+#             SHOWS_LIST += get_files(root=r'\\Theblackpearl\d\Torrents\Shows',extensions=['mkv','mp4'])
+#         SHOWS_TS = time.time()
+# get_shows()
 
 @app.route('/shows')
 @login_required
@@ -355,14 +352,14 @@ def shows():
     if current_user.is_authenticated == False:
         return redirect(url_for('login'))
 
-    get_shows()
+    # get_shows()
 
     clear_cache()
     return render_template(
         "shows.html", 
         title=request.endpoint,
         logged_in=current_user.is_authenticated,
-        item_list=SHOWS_LIST
+        item_list=SHOWS_LIST[0:25]
         )
 
 @app.route("/shows/<query>", methods=['GET', 'POST'])
@@ -419,16 +416,17 @@ def download(fullpath):
     return send_from_directory('static\cache',file, as_attachment=True)
 
 ## VPN #
-# @app.route('/VPN')
+# @app.route('/NordVPN')
 # @login_required
-# def VPN():       
+# def NordVPN():       
 #     if current_user.is_authenticated == False:
 #         return redirect(url_for('login'))
     
-#     VPN_ON = VPN_running()
+#     # VPN_ON = VPN_running()
+#     VPN_ON = True
 
 #     return render_template(
-#         "VPN.html", 
+#         "NordVPN.html", 
 #         title=request.endpoint,
 #         logged_in=current_user.is_authenticated,
 #         VPN_ON=VPN_ON
