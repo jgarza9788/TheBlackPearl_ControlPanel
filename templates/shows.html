@@ -34,35 +34,45 @@
 
 <script>
 
-  let s = document.getElementById("search-input");
+  // let s = document.getElementById("search-input");
+  // const s = document.getElementById("search-input");
 
 
   $(document).ready(function(){
       s = document.getElementById("search-input");
+      // console.log(s);
+      // console.log(s.value);
+      // console.log($('#search-input').ge);
 
   });
 
 
   function focus_search(){
-      s.focus();
+    s = document.getElementById("search-input");
+    s.focus();
   }
 
   function clear_search(){
-      s.value = "";
-      window.location =  window.location.origin + "/shows"
+    s = document.getElementById("search-input");
+    s.value = "";
+    window.location =  window.location.origin + "/shows"
   }
 
   function on_search(){
-      console.log(s.value);
-      console.log(window.location.origin + "/shows/" + s.value);
-      
-      setTimeout(function(){
+    s = document.getElementById("search-input");
+    console.log(s.value);
+    console.log(window.location.origin + "/shows/" + s.value);
 
-          window.location =  window.location.origin + "/shows/" + s.value;
+    url = window.location.origin + "/shows/" + s.value;
+    
+    setTimeout(function(){
 
-          }
-          ,500
-      );
+        // window.location =  window.location.origin + "/movies/" + s.value;
+        window.location = url;
+
+        }
+        ,500
+    );
   }
 
 </script>
@@ -86,6 +96,17 @@
 
 {% endfor %}
 
+<a class="btn blur-background-filter">
+  <div class="text-white">
+    <span class="fs-5 text-center filename">
+      {{ item_list|length }} Items Above
+    </span>
+    <br/>
+    <span class="fs-10 text-center fullpath">
+      Search for More
+    </span>
+  </div>
+</a>  
 
 </div>
 

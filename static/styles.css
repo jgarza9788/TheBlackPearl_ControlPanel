@@ -83,11 +83,19 @@ body{
 	height: 4rem !important;
 	margin-bottom: 1rem;
 	width: 15rem;
+
+	/* transition-duration: 666ms; */
+	/* border-width: 0px; */
+	/* border-color: transparent; */
 }
 
-/* .menu li a{
-    height: 4rem !important;
-}  */
+/* 
+.menu a:hover{
+	background-color: rgba(0, 0, 0, 0.80);
+	border-width: 1px;
+	border-color: #1d9bf0;
+} 
+*/
 
 
 /***************************************************/
@@ -106,7 +114,7 @@ body{
 }
 
 .shadow-xlg{
-	box-shadow: 0 1rem 3rem rgba(0,0,0,0.5)!important;
+	box-shadow: 0 1rem 2rem rgba(0,0,0,0.8)!important;
 }
 
 .blur-background-filter{
@@ -278,6 +286,7 @@ body{
 
 	/* font-size: calc(1.375rem + 1.5vw)!important; */
 }
+
 
 
 .search-box{
