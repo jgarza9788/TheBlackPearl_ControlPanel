@@ -251,12 +251,12 @@ def update_lists():
     while 1==1:
         if (time.time() - TIMESTAMP) > 60*60: 
             print(time.time(),'updating lists')
-            MOVIE_LIST = get_files(root=r'D:\Torrents\Movies',extensions=['mkv','mp4'])
+            MOVIE_LIST = get_files(root=r'D:\Torrents\Movies',extensions=['mkv','avi','mp4'])
             if len(MOVIE_LIST) == 0:
-                MOVIE_LIST += get_files(root=r'\\Theblackpearl\d\Torrents\Movies',extensions=['mkv','mp4'])
-            SHOWS_LIST = get_files(root=r'D:\Torrents\Shows',extensions=['mkv','mp4'])
+                MOVIE_LIST += get_files(root=r'\\Theblackpearl\d\Torrents\Movies',extensions=['mkv','avi','mp4'])
+            SHOWS_LIST = get_files(root=r'D:\Torrents\Shows',extensions=['mkv','mp4','avi'])
             if len(SHOWS_LIST) == 0:
-                SHOWS_LIST += get_files(root=r'\\Theblackpearl\d\Torrents\Shows',extensions=['mkv','mp4'])
+                SHOWS_LIST += get_files(root=r'\\Theblackpearl\d\Torrents\Shows',extensions=['mkv','mp4','avi'])
             time.sleep(60) # every hour
             TIMESTAMP = time.time()
 Thread(name='update_lists',target=update_lists,args=[]).start()
@@ -414,6 +414,28 @@ def download(fullpath):
 
     # return send_from_directory(app.config['ROOT_FOLDER'],path)
     return send_from_directory('static\cache',file, as_attachment=True)
+
+
+@app.route('/movieroulette')
+@login_required
+def Movie_Roulette():  
+    global MOVIE_LIST
+
+    if current_user.is_authenticated == False:
+        return redirect(url_for('login'))
+
+    import random
+    rc = []
+    while len(rc) == 0:
+        rc.append(random.choice(MOVIE_LIST))
+    
+    clear_cache()
+    return render_template(
+        "movieroulette.html", 
+        title=request.endpoint,
+        logged_in=current_user.is_authenticated,
+        item_list=rc
+        )
 
 ## VPN #
 # @app.route('/NordVPN')

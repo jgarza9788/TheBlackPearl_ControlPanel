@@ -2,10 +2,12 @@
 {% block content %}
 
 
+
+
 <div class="home-grid mxw500">
   {% for dive in drivedata %}
 
-  <div class="d-flex flex-column mb-3 border-bottomx bg-darkx rounded-3x shadow-xlgx p-3x">
+  <div class="d-flex flex-column mb-3">
     <div class="text-light fw-bold fs-5">
       <i class="nf nf-md-harddisk"></i>
       {{dive['letter']}} ... {{dive['volumename']}}
@@ -38,6 +40,33 @@
   </div>
 
   {% endfor %}
+
+  {#
+  <script>
+    $(document).ready(function(){
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    });
+  </script>
+
+  <div class="sq4r4r-grid">
+
+    <a class="btn btn-primary btn_small fs-4 shadow-xlg" href="{{ url_for('logout') }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Logout">     <i class="nf nf-md-logout"></i> </a>
+    <a class="btn btn-primary btn_small fs-4 shadow-xlg" href="{{ url_for('home') }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Home">       <i class="nf nf-md-skull"></i> </a>
+    <a class="btn btn-primary btn_small fs-4 shadow-xlg" href="{{ url_for('movies') }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Movies">     <i class="nf nf-md-filmstrip"></i> </a>
+    <a class="btn btn-primary btn_small fs-4 shadow-xlg" href="{{ url_for('shows') }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Shows">     <i class="nf nf-md-television_classic"></i> </a>
+    <a class="btn btn-primary btn_small fs-4 shadow-xlg" href="{{ url_for('Movie_Roulette') }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Movie Roulette ">     
+      <i class="nf nf-md-dice_multiple"></i> 
+    </a>
+    <a class="btn btn-primary btn_small fs-4 shadow-xlg" href="https://app.plex.tv/" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Plex">  
+      <i class="nf nf-md-plex"></i>       
+    </a>
+
+  </div>
+  #}
+
+
+
 </div>
 
 

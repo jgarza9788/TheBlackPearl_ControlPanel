@@ -135,6 +135,10 @@ src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.0/mdb.min.js"
         {
             icon.classList.add('nf-md-logout');
         }
+        else if (this_url.includes('roulette'))
+        {
+            icon.classList.add('nf-md-dice_multiple');
+        }
         else
         {
             icon.classList.add('nf-md-skull');
@@ -253,12 +257,27 @@ src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.0/mdb.min.js"
 
         var button = $(event.target);
         console.log(button);
+        
         button.addClass('anim-primary-effect');
 
         setTimeout(function(){
             button.removeClass('anim-primary-effect');
         }, 777);
     });
+
+
+    $('.downloadbtn').click(function(event) {
+
+        var button = $(event.target);
+        console.log(button);
+        
+        button.find('.nf').removeClass('nf-md-dice_multiple');
+        button.find('.nf').addClass('nf-md-timelapse');
+        button.find('.label').text('Loading...');
+
+        
+    });
+
 
     /*
     $('.btn-primary').click(function(event) {
@@ -279,690 +298,20 @@ src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.0/mdb.min.js"
 
 <!---->
 
-<canvas></canvas>
+{% import 'backgroundeffect.j2' as bge -%}
 
-<script id="vs" type="x-shader/vertex">
-    attribute vec3 position;
 
-    void main() {
-    
-        gl_Position = vec4( position, 1.0 );
-    
-    }
-</script> 
+{#
+speed, red, blue, green    
+#}
 
-<script id="fs" type="x-shader/fragment" class="topographic"> 
 
-    uniform float time;
-    //uniform float now;
-    uniform vec2 resolution;
+{{ bge.bge(0.02,29.0/255.0,155.0/255.0,240.0/255.0) }}
 
-    // https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
-    // Simplex 2D noise
-    //
 
-    // https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
-    //	Simplex 3D Noise 
-    //	by Ian McEwan, Ashima Arts
-    //
-
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-
-    // https://github.com/ashima/webgl-noise/blob/master/src/noise3D.glsl
-    //
-    // Description : Array and textureless GLSL 2D/3D/4D simplex 
-    //               noise functions.
-    //      Author : Ian McEwan, Ashima Arts.
-    //  Maintainer : stegu
-    //     Lastmod : 20201014 (stegu)
-    //     License : Copyright (C) 2011 Ashima Arts. All rights reserved.
-    //               Distributed under the MIT License. See LICENSE file.
-    //               https://github.com/ashima/webgl-noise
-    //               https://github.com/stegu/webgl-noise
-    // 
-
-    vec3 mod289(vec3 x) {
-    return x - floor(x * (1.0 / 289.0)) * 289.0;
-    }
-
-    vec4 mod289(vec4 x) {
-    return x - floor(x * (1.0 / 289.0)) * 289.0;
-    }
-
-    vec4 permute(vec4 x) {
-    return mod289(((x*34.0)+10.0)*x);
-    }
-
-    vec4 taylorInvSqrt(vec4 r)
-    {
-    return 1.79284291400159 - 0.85373472095314 * r;
-    }
-
-    float snoise(vec3 v)
-    { 
-    const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;
-    const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
-
-    // First corner
-    vec3 i  = floor(v + dot(v, C.yyy) );
-    vec3 x0 =   v - i + dot(i, C.xxx) ;
-
-    // Other corners
-    vec3 g = step(x0.yzx, x0.xyz);
-    vec3 l = 1.0 - g;
-    vec3 i1 = min( g.xyz, l.zxy );
-    vec3 i2 = max( g.xyz, l.zxy );
-
-    //   x0 = x0 - 0.0 + 0.0 * C.xxx;
-    //   x1 = x0 - i1  + 1.0 * C.xxx;
-    //   x2 = x0 - i2  + 2.0 * C.xxx;
-    //   x3 = x0 - 1.0 + 3.0 * C.xxx;
-    vec3 x1 = x0 - i1 + C.xxx;
-    vec3 x2 = x0 - i2 + C.yyy; // 2.0*C.x = 1/3 = C.y
-    vec3 x3 = x0 - D.yyy;      // -1.0+3.0*C.x = -0.5 = -D.y
-
-    // Permutations
-    i = mod289(i); 
-    vec4 p = permute( permute( permute( 
-            i.z + vec4(0.0, i1.z, i2.z, 1.0 ))
-            + i.y + vec4(0.0, i1.y, i2.y, 1.0 )) 
-            + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
-
-    // Gradients: 7x7 points over a square, mapped onto an octahedron.
-    // The ring size 17*17 = 289 is close to a multiple of 49 (49*6 = 294)
-    float n_ = 0.142857142857; // 1.0/7.0
-    vec3  ns = n_ * D.wyz - D.xzx;
-
-    vec4 j = p - 49.0 * floor(p * ns.z * ns.z);  //  mod(p,7*7)
-
-    vec4 x_ = floor(j * ns.z);
-    vec4 y_ = floor(j - 7.0 * x_ );    // mod(j,N)
-
-    vec4 x = x_ *ns.x + ns.yyyy;
-    vec4 y = y_ *ns.x + ns.yyyy;
-    vec4 h = 1.0 - abs(x) - abs(y);
-
-    vec4 b0 = vec4( x.xy, y.xy );
-    vec4 b1 = vec4( x.zw, y.zw );
-
-    //vec4 s0 = vec4(lessThan(b0,0.0))*2.0 - 1.0;
-    //vec4 s1 = vec4(lessThan(b1,0.0))*2.0 - 1.0;
-    vec4 s0 = floor(b0)*2.0 + 1.0;
-    vec4 s1 = floor(b1)*2.0 + 1.0;
-    vec4 sh = -step(h, vec4(0.0));
-
-    vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;
-    vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;
-
-    vec3 p0 = vec3(a0.xy,h.x);
-    vec3 p1 = vec3(a0.zw,h.y);
-    vec3 p2 = vec3(a1.xy,h.z);
-    vec3 p3 = vec3(a1.zw,h.w);
-
-    //Normalise gradients
-    vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
-    p0 *= norm.x;
-    p1 *= norm.y;
-    p2 *= norm.z;
-    p3 *= norm.w;
-
-    // Mix final noise value
-    vec4 m = max(0.5 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
-    m = m * m;
-    return 105.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), 
-                                dot(p2,x2), dot(p3,x3) ) );
-    }
-
-//////////////////////////////////////////////////////////////////////////////////////////////
-
-    void main( void ) {
-      
-      vec2 p = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
-
-      vec3 rgb = vec3(0.0,0.0,0.0);
-
-      //color
-      //vec3 color = vec3(0.0,0.8980,1.0);
-
-      //tiff blue
-      //vec3 color = vec3(0.03921,0.7294,0.7098); 
-
-      //primary blue
-      //vec3 color = vec3(0.0509,0.43137,0.992153686); 
-
-
-      float r = 29.0/255.0;
-      float g = 155.0/255.0;
-      float b = 240.0/255.0;
-      vec3 color = vec3(r,g,b);
-
-      //small time
-      //float smtime = time;
-
-      p.x += sin(time);
-      p.y += cos(time);
-
-      // x = scale, y = scale, t = time
-      float scale = 0.2;
-      vec3 xyt  = vec3(p.x * scale ,p.y * scale,time);
-
-      float f = snoise(xyt);
-
-      float d = 0.0;
-
-      d = 1.0 - abs(f-0.5);
-      d = sin(25.0 * d);
-
-      float color_amount = 0.3;
-
-      if (d >= (1.0 - color_amount))
-      {
-        d = 1.0;
-      }
-      else if (d >= (1.0 - color_amount - 0.01))
-      {
-        d = 0.75;
-      }
-      else if (d >= (1.0 - color_amount - 0.02))
-      {
-        d = 0.5;
-      }
-      else if (d >= (1.0 - color_amount - 0.03))
-      {
-        d = 0.25;
-      }
-      else
-      {
-        d = 0.0;
-      }
-
-      rgb += color * d;
-
-      // red white and blue
-      /*
-      vec3 red = vec3(0.733,0.004,0.012);
-      vec3 white = vec3(1.0,1.0,1.0);
-      vec3 blue = vec3(0.071,0.027,0.64);
-
-      rgb = white;
-      d = 1.0 - abs(f-0.5);
-      if (d > 0.66)
-      {
-        rgb *= red;
-      }
-      else if (d > 0.33)
-      {
-        rgb *= blue;
-      }
-      */
-
-      
-      gl_FragColor = vec4(rgb.x, rgb.y, rgb.z, 1.0);
-      
-
-    }
- 
-    </script> 
-
-<script id="fs-disabled" type="x-shader/fragment" class="dot-maxtrix"> 
-
-    uniform float time;
-    uniform vec2 resolution;
-
-    // https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
-    // Simplex 2D noise
-    //
-
-    // https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
-    //	Simplex 3D Noise 
-    //	by Ian McEwan, Ashima Arts
-    //
-    /*
-    vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
-    vec4 taylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}
-    
-    float snoise(vec3 v){ 
-    const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;
-    const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
-    
-    // First corner
-    vec3 i  = floor(v + dot(v, C.yyy) );
-    vec3 x0 =   v - i + dot(i, C.xxx) ;
-    
-    // Other corners
-    vec3 g = step(x0.yzx, x0.xyz);
-    vec3 l = 1.0 - g;
-    vec3 i1 = min( g.xyz, l.zxy );
-    vec3 i2 = max( g.xyz, l.zxy );
-    
-      //  x0 = x0 - 0. + 0.0 * C 
-      vec3 x1 = x0 - i1 + 1.0 * C.xxx;
-      vec3 x2 = x0 - i2 + 2.0 * C.xxx;
-      vec3 x3 = x0 - 1. + 3.0 * C.xxx;
-    
-    // Permutations
-    i = mod(i, 289.0 ); 
-    vec4 p = permute( permute( permute( 
-        i.z + vec4(0.0, i1.z, i2.z, 1.0 ))
-        + i.y + vec4(0.0, i1.y, i2.y, 1.0 )) 
-        + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
-    
-    // Gradients
-    // ( N*N points uniformly over a square, mapped onto an octahedron.)
-      float n_ = 1.0/7.0; // N=7
-      vec3  ns = n_ * D.wyz - D.xzx;
-    
-      vec4 j = p - 49.0 * floor(p * ns.z *ns.z);  //  mod(p,N*N)
-    
-      vec4 x_ = floor(j * ns.z);
-      vec4 y_ = floor(j - 7.0 * x_ );    // mod(j,N)
-    
-    vec4 x = x_ *ns.x + ns.yyyy;
-    vec4 y = y_ *ns.x + ns.yyyy;
-    vec4 h = 1.0 - abs(x) - abs(y);
-  
-    vec4 b0 = vec4( x.xy, y.xy );
-    vec4 b1 = vec4( x.zw, y.zw );
-  
-    vec4 s0 = floor(b0)*2.0 + 1.0;
-    vec4 s1 = floor(b1)*2.0 + 1.0;
-    vec4 sh = -step(h, vec4(0.0));
-  
-    vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;
-    vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;
-  
-    vec3 p0 = vec3(a0.xy,h.x);
-    vec3 p1 = vec3(a0.zw,h.y);
-    vec3 p2 = vec3(a1.xy,h.z);
-    vec3 p3 = vec3(a1.zw,h.w);
-    
-    //Normalise gradients
-    vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
-      p0 *= norm.x;
-      p1 *= norm.y;
-      p2 *= norm.z;
-      p3 *= norm.w;
-    
-    // Mix final noise value
-    vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
-    m = m * m;
-    return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), 
-                    dot(p2,x2), dot(p3,x3) ) );
-    }
-    */
-
-//////////////////////////////////////////////////////////////////////////////////////////////
-
-// https://github.com/ashima/webgl-noise/blob/master/src/noise3D.glsl
-
-//
-// Description : Array and textureless GLSL 2D/3D/4D simplex 
-//               noise functions.
-//      Author : Ian McEwan, Ashima Arts.
-//  Maintainer : stegu
-//     Lastmod : 20201014 (stegu)
-//     License : Copyright (C) 2011 Ashima Arts. All rights reserved.
-//               Distributed under the MIT License. See LICENSE file.
-//               https://github.com/ashima/webgl-noise
-//               https://github.com/stegu/webgl-noise
-// 
-
-vec3 mod289(vec3 x) {
-return x - floor(x * (1.0 / 289.0)) * 289.0;
-}
-
-vec4 mod289(vec4 x) {
-return x - floor(x * (1.0 / 289.0)) * 289.0;
-}
-
-vec4 permute(vec4 x) {
-   return mod289(((x*34.0)+10.0)*x);
-}
-
-vec4 taylorInvSqrt(vec4 r)
-{
-return 1.79284291400159 - 0.85373472095314 * r;
-}
-
-float snoise(vec3 v)
-{ 
-const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;
-const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
-
-// First corner
-vec3 i  = floor(v + dot(v, C.yyy) );
-vec3 x0 =   v - i + dot(i, C.xxx) ;
-
-// Other corners
-vec3 g = step(x0.yzx, x0.xyz);
-vec3 l = 1.0 - g;
-vec3 i1 = min( g.xyz, l.zxy );
-vec3 i2 = max( g.xyz, l.zxy );
-
-//   x0 = x0 - 0.0 + 0.0 * C.xxx;
-//   x1 = x0 - i1  + 1.0 * C.xxx;
-//   x2 = x0 - i2  + 2.0 * C.xxx;
-//   x3 = x0 - 1.0 + 3.0 * C.xxx;
-vec3 x1 = x0 - i1 + C.xxx;
-vec3 x2 = x0 - i2 + C.yyy; // 2.0*C.x = 1/3 = C.y
-vec3 x3 = x0 - D.yyy;      // -1.0+3.0*C.x = -0.5 = -D.y
-
-// Permutations
-i = mod289(i); 
-vec4 p = permute( permute( permute( 
-           i.z + vec4(0.0, i1.z, i2.z, 1.0 ))
-         + i.y + vec4(0.0, i1.y, i2.y, 1.0 )) 
-         + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
-
-// Gradients: 7x7 points over a square, mapped onto an octahedron.
-// The ring size 17*17 = 289 is close to a multiple of 49 (49*6 = 294)
-float n_ = 0.142857142857; // 1.0/7.0
-vec3  ns = n_ * D.wyz - D.xzx;
-
-vec4 j = p - 49.0 * floor(p * ns.z * ns.z);  //  mod(p,7*7)
-
-vec4 x_ = floor(j * ns.z);
-vec4 y_ = floor(j - 7.0 * x_ );    // mod(j,N)
-
-vec4 x = x_ *ns.x + ns.yyyy;
-vec4 y = y_ *ns.x + ns.yyyy;
-vec4 h = 1.0 - abs(x) - abs(y);
-
-vec4 b0 = vec4( x.xy, y.xy );
-vec4 b1 = vec4( x.zw, y.zw );
-
-//vec4 s0 = vec4(lessThan(b0,0.0))*2.0 - 1.0;
-//vec4 s1 = vec4(lessThan(b1,0.0))*2.0 - 1.0;
-vec4 s0 = floor(b0)*2.0 + 1.0;
-vec4 s1 = floor(b1)*2.0 + 1.0;
-vec4 sh = -step(h, vec4(0.0));
-
-vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;
-vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;
-
-vec3 p0 = vec3(a0.xy,h.x);
-vec3 p1 = vec3(a0.zw,h.y);
-vec3 p2 = vec3(a1.xy,h.z);
-vec3 p3 = vec3(a1.zw,h.w);
-
-//Normalise gradients
-vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
-p0 *= norm.x;
-p1 *= norm.y;
-p2 *= norm.z;
-p3 *= norm.w;
-
-// Mix final noise value
-vec4 m = max(0.5 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
-m = m * m;
-return 105.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), 
-                              dot(p2,x2), dot(p3,x3) ) );
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////
-
-    void main( void ) {
-            
-      vec2 p = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
-
-      vec2 p2 = p;
-
-      vec3 rgb = vec3(0.0,0.0,0.0);
-
-      //color
-      vec3 color = vec3(0.0,0.8980,1.0);
-
-      float smtime = time * 0.05;
-
-      p2.x += sin(smtime);
-      p2.y += cos(smtime);
-
-      vec3 xyt  = vec3(p2.x * 0.5 ,p2.y * 0.5,smtime);
-
-      float f = snoise(xyt);
-      f -=  0.5;
-
-
-    //vec2 d = vec2(0.0,0.0);
-    float d = 0.0;
-    float dx = 0.0;
-    float dy = 0.0;
-    vec2 oneone = vec2(1.0,1.0);
-
-    for (float x = -2.0 ; x <= 2.0 ; x += 0.1)
-    {
-        for (float y = -2.0 ; y <= 2.0 ; y += 0.1)
-        {
-
-            dx = p.x - x;
-            dy = p.y - y;
-
-            dx += (f * 0.2);
-            dy += (f * 0.2);
-
-
-            d  = sqrt( pow( dx ,2.0) + pow( dy ,2.0) );
-
-            //d *= pow(f,1.5);
-
-            if (d < 0.005  && d > 0.0)
-            {
-                rgb += color;
-            }
-
-            
-
-        }	
-    }
-
-    
-
-      //rgb += color ;
-
-      //rgb *= 0.33;
-      
-      gl_FragColor = vec4(rgb.x, rgb.y, rgb.z, 1.0);
-      
-
-    }
- 
-</script> 
-
-<script>
-    /**
-     * Provides requestAnimationFrame in a cross browser way.
-     * paulirish.com/2011/requestanimationframe-for-smart-animating/
-     */
-    window.requestAnimationFrame = window.requestAnimationFrame || ( function() {
-
-    return  window.webkitRequestAnimationFrame ||
-            window.mozRequestAnimationFrame ||
-            window.oRequestAnimationFrame ||
-            window.msRequestAnimationFrame ||
-            function(  callback, element ) {
-                window.setTimeout( callback, 1000 / 60 );
-            };
-
-    })();
-
-
-    var canvas, 
-        gl, 
-        buffer, 
-        vertex_shader, fragment_shader, 
-        currentProgram,
-        vertex_position,
-        timeLocation,
-        resolutionLocation,
-        parameters = {  
-                        start_time  : new Date().getTime(), 
-                        time        : 0, 
-                        screenWidth : 0, 
-                        screenHeight: 0 
-                    };
-
-    init();
-    animate();
-
-
-    function init() {
-
-        vertex_shader = document.getElementById('vs').textContent;
-        fragment_shader = document.getElementById('fs').textContent;
-        canvas = document.querySelector( 'canvas' );
-
-
-        // Initialise WebGL
-
-        try {
-
-            gl = canvas.getContext( 'experimental-webgl' );
-
-        } catch( error ) { }
-
-        if ( !gl ) {
-
-            throw "cannot create webgl context";
-
-        }
-
-        // Create Vertex buffer (2 triangles)
-
-        buffer = gl.createBuffer();
-        gl.bindBuffer( gl.ARRAY_BUFFER, buffer );
-        gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( [ - 1.0, - 1.0, 1.0, - 1.0, - 1.0, 1.0, 1.0, - 1.0, 1.0, 1.0, - 1.0, 1.0 ] ), gl.STATIC_DRAW );
-
-        // Create Program
-
-        currentProgram = createProgram( vertex_shader, fragment_shader );
-
-        
-        timeLocation = gl.getUniformLocation( currentProgram, 'time' );
-        resolutionLocation = gl.getUniformLocation( currentProgram, 'resolution' );
-
-        // gl.getUniformLocation(currentProgram, 'now');
-        // gl.uniform1f(currentProgram,Date.now()+1.0);
-
-
-    }
-
-    function createProgram( vertex, fragment ) {
-
-        var program = gl.createProgram();
-
-        var vs = createShader( vertex, gl.VERTEX_SHADER );
-        var fs = createShader( '#ifdef GL_ES\nprecision highp float;\n#endif\n\n' + fragment, gl.FRAGMENT_SHADER );
-
-        if ( vs == null || fs == null ) return null;
-
-        gl.attachShader( program, vs );
-        gl.attachShader( program, fs );
-
-        gl.deleteShader( vs );
-        gl.deleteShader( fs );
-
-        gl.linkProgram( program );
-
-        if ( !gl.getProgramParameter( program, gl.LINK_STATUS ) ) {
-
-            alert( "ERROR:\n" +
-            "VALIDATE_STATUS: " + gl.getProgramParameter( program, gl.VALIDATE_STATUS ) + "\n" +
-            "ERROR: " + gl.getError() + "\n\n" +
-            "- Vertex Shader -\n" + vertex + "\n\n" +
-            "- Fragment Shader -\n" + fragment );
-
-            return null;
-
-        }
-
-        return program;
-
-    }
-
-    function createShader( src, type ) {
-
-        var shader = gl.createShader( type );
-
-        gl.shaderSource( shader, src );
-        gl.compileShader( shader );
-
-        if ( !gl.getShaderParameter( shader, gl.COMPILE_STATUS ) ) {
-
-            alert( ( type == gl.VERTEX_SHADER ? "VERTEX" : "FRAGMENT" ) + " SHADER:\n" + gl.getShaderInfoLog( shader ) );
-            return null;
-
-        }
-
-        return shader;
-
-    }
-
-    function resizeCanvas( event ) {
-
-        if ( canvas.width != canvas.clientWidth ||
-                canvas.height != canvas.clientHeight ) {
-
-            canvas.width = canvas.clientWidth;
-            canvas.height = canvas.clientHeight;
-
-            parameters.screenWidth = canvas.width;
-            parameters.screenHeight = canvas.height;
-
-            gl.viewport( 0, 0, canvas.width, canvas.height );
-
-        }
-
-    }
-
-    function animate() {
-
-        resizeCanvas();
-        render();
-        requestAnimationFrame( animate );
-
-    }
-
-    function render() {
-
-        if ( !currentProgram ) return;
-
-
-        currentTime = new Date();
-        h = currentTime.getHours() * 3600000;
-        m = currentTime.getMinutes() * 60000;
-        s = currentTime.getSeconds() * 1000;
-        ms = currentTime.getMilliseconds();
-        t = h + m + s + ms;
-
-        // parameters.time = (t/(8.64*Math.pow(10,7))) * 100000;
-        parameters.time = Math.sin(t/(8.64*Math.pow(10,7)))  * 100000;
-        // parameters.time = new Date().getTime() - parameters.start_time;
-
-        // console.log(parameters.time);
-
-        gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
-
-        // Load program into GPU
-
-        gl.useProgram( currentProgram );
-
-        // Set values to program variables
-
-        gl.uniform1f( timeLocation, parameters.time / 1000 );
-        gl.uniform2f( resolutionLocation, parameters.screenWidth, parameters.screenHeight );
-
-        // Render geometry
-
-        gl.bindBuffer( gl.ARRAY_BUFFER, buffer );
-        gl.vertexAttribPointer( vertex_position, 2, gl.FLOAT, false, 0, 0 );
-        gl.enableVertexAttribArray( vertex_position );
-        gl.drawArrays( gl.TRIANGLES, 0, 6 );
-        gl.disableVertexAttribArray( vertex_position );
-
-    }
-</script> 
-
+{#
+{{ bge.bge(1.0.0,0.03921,0.7294,0.7098) }}
+#}
 
 <!---->
 
@@ -970,19 +319,26 @@ return 105.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1),
 <div class="modal fade" id="FileModal" tabindex="-5" aria-labelledby="FileModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content blur-background-filter">
-        <div class="modal-header text-light border-0">
+        <!-- <div class="modal-header text-light border-0">
           <h1 class="modal-title fs-3" id="FileModalLabel">Modal title</h1>
-          <button type="button" class="bg-danger btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
+          <button type="button" class="btn-close bg-danger" data-bs-dismiss="modal" aria-label="Close">
+          </button>
+        </div> -->
+        <div class="modal-header text-light border-0 h6r row_tc">
+            <h1 class="modal-title fs-3" id="FileModalLabel">Modal title</h1>
+            <a type="button" class="btn btn-danger fs-4 icon-only w-100 h-100" data-bs-dismiss="modal" aria-label="Close" >
+                <i class="nf nf-cod-close"></i>
+            </a>
+          </div>
         <div class="modal-body text-wrap text-light fs-4">
           ...
         </div>
         <div class="modal-footer border-0">
             <!-- <div></div> -->
           <!-- <button type="button" class="btn btn-secondary h4r" data-bs-dismiss="modal">Close</button> -->
-            <a id="downloadbtn" type="button" class="btn btn-primary fs-4 row_iti h4r" href="">
+            <a id="downloadbtn" type="button" class="downloadbtn btn btn-primary fs-4 row_iti h4r" href="">
                 <i class="nf nf-md-download"></i>
-                Download
+                <span class="label">Download</span>
             </a>
         </div>
       </div>
@@ -992,12 +348,32 @@ return 105.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1),
 
 <ul class="menu">
 
+    {#
+    {% import 'macro1.j2' as m1 -%}
+    {{ m1.input('justin', value='', type='text') }}
+    #}
+
     {% if logged_in %}
     
     <a class="btn btn-dark row_iti fs-4 blur-background-filter shadow-xlg" href="{{ url_for('logout') }}">     <i class="nf nf-md-logout"></i> Logout </a>
     <a class="btn btn-dark row_iti fs-4 blur-background-filter shadow-xlg" href="{{ url_for('home') }}">       <i class="nf nf-md-skull"></i> Home </a>
     <a class="btn btn-dark row_iti fs-4 blur-background-filter shadow-xlg" href="{{ url_for('movies') }}">     <i class="nf nf-md-filmstrip"></i> Movies </a>
+
     <a class="btn btn-dark row_iti fs-4 blur-background-filter shadow-xlg" href="{{ url_for('shows') }}">     <i class="nf nf-md-television_classic"></i> Shows </a>
+
+    
+    <a class="btn btn-dark row_iti fs-4 blur-background-filter shadow-xlg" href="{{ url_for('Movie_Roulette') }}">     
+        <i class="nf nf-md-dice_multiple"></i> 
+        <span class="fs-6 text-wrap">
+            Movie<br/ >Roulette 
+        </span>
+    </a>
+
+    <a class="btn btn-dark row_iti fs-4 blur-background-filter shadow-xlg" href="https://app.plex.tv/">  
+    <i class="nf nf-md-plex"></i>       
+    Plex 
+    </a>
+        
     
     {#
     <a class="btn btn-dark row_iti fs-4 blur-background-filter" href="{{ url_for('NordVPN') }}">        
@@ -1012,9 +388,19 @@ return 105.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1),
     {% else %}
     
     <a class="btn btn-dark row_iti fs-4 blur-background-filter" href="{{ url_for('login') }}">     <i class="nf nf-md-login"></i> Login </a>
-    <a class="btn btn-dark row_iti fs-4 blur-background-filter disabled " href="{{ url_for('home') }}">       <i class="nf nf-md-skull"></i> Home </a>
-    <a class="btn btn-dark row_iti fs-4 blur-background-filter disabled " href="{{ url_for('movies') }}">     <i class="nf nf-md-filmstrip"></i> Movies </a>
-    <a class="btn btn-dark row_iti fs-4 blur-background-filter disabled " href="{{ url_for('shows') }}">     <i class="nf nf-md-television_classic"></i> Shows </a>
+    <a class="btn btn-dark row_iti fs-4 blur-background-filter disabled " >     <i class="nf nf-md-skull"></i> Home </a>
+    <a class="btn btn-dark row_iti fs-4 blur-background-filter disabled " >     <i class="nf nf-md-filmstrip"></i> Movies </a>
+    <a class="btn btn-dark row_iti fs-4 blur-background-filter disabled " >     <i class="nf nf-md-television_classic"></i> Shows </a>
+    <a class="btn btn-dark row_iti fs-4 blur-background-filter disabled " >     
+        <i class="nf nf-md-dice_multiple"></i> 
+        <span class="fs-6 text-wrap">
+            Movie<br/ >Roulette 
+        </span>
+    </a>
+    <a class="btn btn-dark row_iti fs-4 blur-background-filter disabled " >     
+        <i class="nf nf-md-plex"></i>       
+        Plex 
+    </a>
     {#
     <a class="btn btn-dark row_iti fs-4 blur-background-filter disabled " href="{{ url_for('VPN') }}">        <i class="nf nf-md-shield_star"></i> VPN </a>
     #}
@@ -1023,7 +409,7 @@ return 105.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1),
 
 </ul>
 
-<div class="bg-darkx blur-background-filter rounded-3 shadow-xlg td666 menu-show " id="content">
+<div class="bg-darkx blur-background-filter rounded-3 shadow-xlg td666 menu-show" id="content">
     <div class="base-grid">
         <div class="row_iti">
             <a class="btn btn-primary anim-primary w-100 h-100 fs-4 icon-only" id="menu-button" onclick="toggle_menu()">
