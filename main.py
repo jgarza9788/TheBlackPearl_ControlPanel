@@ -20,6 +20,7 @@ configdata = Config.Config().data
 SECRET_KEY = configdata["SECRET_KEY"]
 
 from drivedata import get_drivedata
+from utils.IsRunning import is_running
 
 import os
 DIR = os.path.dirname(os.path.abspath(__file__))
@@ -141,7 +142,8 @@ def home():
             "home.html", 
             logged_in=current_user.is_authenticated,
             title=request.endpoint,
-            drivedata=drivedata
+            drivedata=drivedata,
+            programs=is_running(['NordVPN.exe','Plex Media Server.exe','qbittorrent.exe'])
             )
     else:
         return redirect(url_for('login'))

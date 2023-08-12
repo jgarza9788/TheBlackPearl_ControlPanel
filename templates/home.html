@@ -41,6 +41,28 @@
 
   {% endfor %}
 
+  <div class="h4r"></div>
+
+  <div class="text-light fw-bold fs-5">
+    Programs
+  </div>
+
+  {% for program in programs %}
+
+  <div class="d-flex flex-column mb-3">
+    {% if program['on'] == True %}
+    <div class="text-light fs-6">
+      <i class="text-success nf nf-fa-check_circle"></i> {{program['name']}} 
+    </div>
+    {% else %}
+    <div class="text-light fs-6">
+      <i class="text-danger nf nf-oct-x_circle_fill"></i> {{program['name']}} 
+    </div>
+    {% endif %}
+  </div>
+
+  {% endfor %}
+
   {#
   <script>
     $(document).ready(function(){
