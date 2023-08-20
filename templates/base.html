@@ -100,8 +100,10 @@ src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.0/mdb.min.js"
 
 <script >
     $(document).ready(function(){
+
         setTimeout(function(){
-            toggle_menu();
+            // toggle_menu();
+            hide_menu();
         }, 333);
 
 
@@ -148,59 +150,62 @@ src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.0/mdb.min.js"
 </script>
 
 <script >
-    var menu_hide_icon = "nf-md-menu";
+    // var menu_hide_icon = "nf-md-menu";
     // var menu_show_icon = "nf-md-menu_open";
-    var menu_show_icon = "nf-fa-arrow_left";
+    // var menu_show_icon = "nf-fa-arrow_left";
 
     function toggle_menu(){
-        var icon = document.getElementById("menu-icon");
-        var content_card = document.getElementById("content");
-        content_card.classList.add("td666");
+        console.log("toggle Menu")
 
-        // Console.log(content_card);
-    
-        if ( content_card.classList.contains('menu-show') )
+        var main_grid = document.getElementById("content");
+        console.log(main_grid)
+
+        var menu_section = document.getElementById("menu-section");
+
+        if ( main_grid.classList.contains('main-grid-normal') )
         {    
-            icon.classList.add(menu_hide_icon);
-            icon.classList.remove(menu_show_icon);
 
-            content_card.classList.add("menu-hide");
-            content_card.classList.remove("menu-show");
+            main_grid.classList.remove("main-grid-normal");
+            main_grid.classList.add("main-grid-menu");
+
+            menu_section.classList.remove("overflow-y-hidden");
+            menu_section.classList.add("overflow-y-scroll");
+            
         }
         else
         {
-            icon.classList.add(menu_show_icon);
-            icon.classList.remove(menu_hide_icon);
+            main_grid.classList.remove("main-grid-menu");
+            main_grid.classList.add("main-grid-normal");
 
-            content_card.classList.remove("menu-hide");
-            content_card.classList.add("menu-show");
+            menu_section.classList.remove("overflow-y-scroll");
+            menu_section.classList.add("overflow-y-hidden");
+            
         }
     }
 
     function show_menu(){
         console.log('Show Menu');
-        var icon = document.getElementById("menu-icon");
-        var content_card = document.getElementById("content");
-        content_card.classList.add("td666");
 
-        icon.classList.add(menu_show_icon);
-        icon.classList.remove(menu_hide_icon);
+        var main_grid = document.getElementById("content");
+        main_grid.classList.remove("main-grid-normal");
+        main_grid.classList.add("main-grid-menu");
 
-        content_card.classList.remove("menu-hide");
-        content_card.classList.add("menu-show");
+        var menu_section = document.getElementById("menu-section");
+        menu_section.classList.remove("overflow-y-hidden");
+        menu_section.classList.add("overflow-y-scroll");
+
     }
 
     function hide_menu(){
         console.log('Hide Menu');
-        var icon = document.getElementById("menu-icon");
-        var content_card = document.getElementById("content");
-        content_card.classList.add("td666");
 
-        icon.classList.add(menu_hide_icon);
-        icon.classList.remove(menu_show_icon);
+        var main_grid = document.getElementById("content");
+        main_grid.classList.remove("main-grid-menu");
+        main_grid.classList.add("main-grid-normal");
 
-        content_card.classList.add("menu-hide");
-        content_card.classList.remove("menu-show");
+        var menu_section = document.getElementById("menu-section");
+        menu_section.classList.remove("overflow-y-scroll");
+        menu_section.classList.add("overflow-y-hidden");
     }
 </script>
 
@@ -208,62 +213,37 @@ src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.0/mdb.min.js"
 <script>
 
     
-    $(document).ready(function(){
-
-        //https://stackoverflow.com/questions/53192433/how-to-detect-swipe-in-javascript#53192539
-        
-
-    // $("#content").swiperight(function() {
-    //     show_menu();
-    // });
-
-    // $("#content").swiperight(function() {
-    //     hide_menu();
-    // });
-
-    /*
-    $('#content').on("swipe",function(event) {
-
-        console.log(event);
-        console.log(event.swipestart.coords)
-
-        //swipe right
-        if ( 
-            event.swipestart.coords[0] < event.swipestop.coords[0] && 
-            (event.swipestart.coords[1]*0.75) < event.swipestop.coords[1] < (event.swipestart.coords[1]*1.25)
-            ) 
+    $(document).keydown(function(event) {
+        if (event.ctrlKey && (event.key === "c" || event.key === "C")) 
         {
-            show_menu();
+            // Ctrl+C was pressed
+            console.log("Ctrl+C pressed");
+            toggle_menu();
         }
-        //swipe left
-        if ( 
-            event.swipestart.coords[0] > event.swipestop.coords[0] && 
-            (event.swipestart.coords[1]*0.75) < event.swipestop.coords[1] < (event.swipestart.coords[1]*1.25)
-            ) 
+        if (event.ctrlKey && (event.key === "m" || event.key === "M")) 
         {
-            hide_menu();
+            // Ctrl+C was pressed
+            console.log("Ctrl+C pressed");
+            toggle_menu();
         }
+    });
 
-        });
-    */
-    
-    })
 </script>
 
 <script>
     $(document).ready(function(){
     
-    $('.anim-primary').click(function(event) {
+    // $('.anim-primary').click(function(event) {
 
-        var button = $(event.target);
-        console.log(button);
+    //     var button = $(event.target);
+    //     console.log(button);
         
-        button.addClass('anim-primary-effect');
+    //     button.addClass('anim-primary-effect');
 
-        setTimeout(function(){
-            button.removeClass('anim-primary-effect');
-        }, 777);
-    });
+    //     setTimeout(function(){
+    //         button.removeClass('anim-primary-effect');
+    //     }, 777);
+    // });
 
 
     $('.downloadbtn').click(function(event) {
@@ -305,8 +285,18 @@ src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.0/mdb.min.js"
 speed, red, blue, green    
 #}
 
-
+{#
 {{ bge.bge(0.01,29.0/255.0,155.0/255.0,240.0/255.0) }}
+#}
+
+<!-- twitter blue -->
+<!-- {{ bge.bge(0.01,29.0/255.0,155.0/255.0,240.0/255.0) }} -->
+
+<!-- Tiffany Blue -->
+<!-- {{ bge.bge(0.01,10.0/255.0,186.0/255.0,181.0/255.0) }} -->
+
+<!-- Spotify Green -->
+{{ bge.bge(0.1,30.0/255.0,215.0/255.0,96.0/255.0) }}
 
 
 {#
@@ -345,7 +335,7 @@ speed, red, blue, green
     </div>
   </div>
 
-
+<!--
 <ul class="menu">
 
     {#
@@ -374,16 +364,7 @@ speed, red, blue, green
     Plex 
     </a>
         
-    
-    {#
-    <a class="btn btn-dark row_iti fs-4 blur-background-filter" href="{{ url_for('NordVPN') }}">        
-    <i>
-        <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>NordVPN</title><path d="M2.2838 21.5414A11.9866 11.9866 0 010 14.4832C0 7.8418 5.3727 2.4586 12 2.4586c6.6279 0 12 5.3832 12 12.0246a11.9853 11.9853 0 01-2.2838 7.0582l-5.7636-9.3783-.5565.9419.5645 2.6186L12 8.9338l-2.45 4.1447.5707 2.6451-2.0764-3.5555-5.7605 9.3733z"/></svg>
-    </i> 
-    NordVPN 
-    </a>
-    #}
-    
+   
 
     {% else %}
     
@@ -408,20 +389,18 @@ speed, red, blue, green
     {% endif %}
 
 </ul>
+-->
 
+{#
+<!--
 <div class="bg-darkx blur-background-filter rounded-3 shadow-xlg td666 menu-show" id="content">
     <div class="base-grid">
         <div class="row_iti">
             <a class="btn btn-primary anim-primary w-100 h-100 fs-4 icon-only" id="menu-button" onclick="toggle_menu()">
-                <!-- <i class="bi bi-arrow-right"></i> -->
-                <!-- <i class="bi bi-list"></i> -->
-                <!-- <i class="mdi mdi-menu"></i> -->
                 <i id="menu-icon" class="nf "></i>
-                <!-- > -->
             </a>
 
             <div class="head text-white text-center text-capitalize fs-4 page-title">
-                <!-- <i class="mdi mdi-pirate"></i> -->
                 <i id="icon" class="nf "></i>
                 <div class="space"></div>
                 {{title}}
@@ -434,13 +413,90 @@ speed, red, blue, green
         {% with messages = get_flashed_messages(category_filter=["error"]) %}
         {% if messages %}
             {% for message in messages %}
-                <!-- {{ message }} -->
                 <span class="badge bg-danger shadow-5-strong">{{ message }}</span>
             {% endfor %}
         {% endif %}
         {% endwith %}
 
     </div>
+</div>
+-->
+#}
+
+<div class="main-grid-menu" id="content">
+
+
+    <div class="w100h100 blur-background-filter rounded-4 shadow-001 overflow-hidden">
+        <div class="w100h100 h4r text-white text-center text-capitalize fs-4 page-title ">
+            <i id="icon" class="nf "></i>
+            <div class="space"></div>
+            {{title}}
+        </div>
+
+        {% block content %}
+        {% endblock %}
+    </div> 
+
+
+
+    <div class="w100h100 blur-background-filter rounded-4 shadow-001 overflow-hidden">
+        <div class="nav-grid mxw500 overflow-y-hidden" id="menu-section">
+        <a class="btn btn-primary row_iti fs-4 blur-background-filterx shadow-001" id="menu-button" onclick="toggle_menu()">     
+            <i class="nf nf-md-menu icon-only"> </i>
+            <!-- <div class="fill-item">Menu</div> -->
+            Menu
+        </a>
+    
+
+        {% if logged_in %}
+        
+            <a class="btn btn-dark btn-black row_iti fs-4  shadow-001" href="{{ url_for('logout') }}">     <i class="nf nf-md-logout"></i> Logout </a>
+            <a class="btn btn-dark btn-black row_iti fs-4  shadow-001" href="{{ url_for('home') }}">       <i class="nf nf-md-skull"></i> Home </a>
+            <a class="btn btn-dark btn-black row_iti fs-4  shadow-001" href="{{ url_for('movies') }}">     <i class="nf nf-md-filmstrip"></i> Movies </a>
+        
+            <a class="btn btn-dark btn-black row_iti fs-4  shadow-001" href="{{ url_for('shows') }}">     <i class="nf nf-md-television_classic"></i> Shows </a>
+        
+            
+            <a class="btn btn-dark btn-black row_iti fs-4  shadow-001" href="{{ url_for('Movie_Roulette') }}">     
+                <i class="nf nf-md-dice_multiple"></i> 
+                <span class="fs-4 text-wrap">
+                    Movie Roulette 
+                </span>
+            </a>
+        
+            <a class="btn btn-dark btn-black row_iti fs-4  shadow-001" href="https://app.plex.tv/">  
+            <i class="nf nf-md-plex"></i>       
+            Plex 
+            </a>
+            
+        
+        
+        {% else %}
+            
+            <a class="btn btn-dark btn-black row_iti fs-4 shadow-001" href="{{ url_for('login') }}">     <i class="nf nf-md-login"></i> Login </a>
+            <a class="btn btn-dark btn-black row_iti fs-4 disabled " >     <i class="nf nf-md-skull"></i> Home </a>
+            <a class="btn btn-dark btn-black row_iti fs-4 disabled " >     <i class="nf nf-md-filmstrip"></i> Movies </a>
+            <a class="btn btn-dark btn-black row_iti fs-4 disabled " >     <i class="nf nf-md-television_classic"></i> Shows </a>
+            <a class="btn btn-dark btn-black row_iti fs-4 disabled " >     
+                <i class="nf nf-md-dice_multiple"></i> 
+                <span class="fs-4 text-wrap">
+                    Movie Roulette 
+                </span>
+            </a>
+            <a class="btn btn-dark btn-black row_iti fs-4  disabled " >     
+                <i class="nf nf-md-plex"></i>       
+                Plex 
+            </a>
+            {#
+            <a class="btn btn-dark btn-black row_iti fs-4  disabled " href="{{ url_for('VPN') }}">        <i class="nf nf-md-shield_star"></i> VPN </a>
+            #}
+            
+        {% endif %}
+        </div>
+    </div> 
+
+
+
 </div>
 
 
