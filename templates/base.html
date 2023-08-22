@@ -259,6 +259,19 @@ src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.0/mdb.min.js"
     });
 
 
+    $('.show_modal_btn').click(function(event) {
+
+        var button = $('#downloadbtn');
+        console.log(button);
+
+        button.find('.nf').removeClass('nf-md-timelapse');
+        button.find('.nf').addClass('nf-md-download');
+        button.find('.label').text('Download');
+
+
+    });
+
+
     /*
     $('.btn-primary').click(function(event) {
 
@@ -296,7 +309,7 @@ speed, red, blue, green
 <!-- {{ bge.bge(0.01,10.0/255.0,186.0/255.0,181.0/255.0) }} -->
 
 <!-- Spotify Green -->
-{{ bge.bge(0.1,30.0/255.0,215.0/255.0,96.0/255.0) }}
+{{ bge.bge(0.01,30.0/255.0,215.0/255.0,96.0/255.0) }}
 
 
 {#

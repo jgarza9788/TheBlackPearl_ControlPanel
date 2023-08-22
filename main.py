@@ -401,6 +401,7 @@ def shows_query(query):
 @app.route('/download/<fullpath>',methods=['GET'])
 @login_required
 def download(fullpath):  
+    fullpath = fullpath.strip().strip('\n')
     print(fullpath)  
 
     if current_user.is_authenticated == False:

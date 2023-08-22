@@ -100,7 +100,7 @@
 
 
 {% for item in item_list %}
-<button type="button" class="btn btn-primary text-truncate text-capitalize h4r" data-bs-toggle="modal" data-bs-target="#FileModal" data-bs-file="{{ item['file'] }}" data-bs-fullpath="{{ item['fullpath'] }}">
+<button type="button" class="btn btn-primary text-truncate text-capitalize h4r show_modal_btn" data-bs-toggle="modal" data-bs-target="#FileModal" data-bs-file="{{ item['file'] }}" data-bs-fullpath="{{ item['fullpath'] }}">
   <div class="fs-5 text-start filename">
     {{ item['file'] }}
   </div>
