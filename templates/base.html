@@ -285,6 +285,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.0/mdb.min.js"
     });
     */
     
+    
     })
 </script>
 
@@ -439,7 +440,7 @@ speed, red, blue, green
 <div class="main-grid-menu" id="content">
 
 
-    <div class="w100h100 blur-background-filter rounded-4 shadow-001 overflow-hidden">
+    <div class="w100h100 blur-background-filter rounded-4 shadow-001 overflow-hidden border border-primary border-1">
         <div class="w100h100 h4r text-white text-center text-capitalize fs-4 page-title ">
             <i id="icon" class="nf "></i>
             <div class="space"></div>
@@ -448,13 +449,15 @@ speed, red, blue, green
 
         {% block content %}
         {% endblock %}
+
+
     </div> 
 
 
 
-    <div class="w100h100 blur-background-filter rounded-4 shadow-001 overflow-hidden">
+    <div class="w100h100 blur-background-filter rounded-4 shadow-001 overflow-hidden border border-primary border-1">
         <div class="nav-grid mxw500 overflow-y-hidden" id="menu-section">
-        <a class="btn btn-primary row_iti fs-4 blur-background-filterx shadow-001" id="menu-button" onclick="toggle_menu()">     
+        <a class="btn btn-primary row_iti fs-4 shadow-001" id="menu-button" onclick="toggle_menu()">     
             <i class="nf nf-md-menu icon-only"> </i>
             <!-- <div class="fill-item">Menu</div> -->
             Menu
