@@ -251,7 +251,7 @@ def update_lists():
     global TIMESTAMP
 
     while 1==1:
-        if (time.time() - TIMESTAMP) > 60*60: 
+        if (time.time() - TIMESTAMP) > 60*60*24: 
             print(time.time(),'updating lists')
             MOVIE_LIST = get_files(root=r'D:\Torrents\Movies',extensions=['mkv','avi','mp4'])
             if len(MOVIE_LIST) == 0:
