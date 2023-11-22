@@ -1,3 +1,22 @@
+try:
+    import os
+    import sys
+
+    # Get the path to the virtual environment's activation script
+    env_activate_path = os.path.join("env", "Scripts", "activate")
+
+    # Check if the virtual environment exists and the OS is Windows
+    if os.path.exists(env_activate_path) and sys.platform == "win32":
+        # Execute the activation script
+        activate_cmd = f'"{env_activate_path}"'
+        os.system(activate_cmd)
+
+    # Now you can continue with the rest of your script
+    print("Virtual environment activated!")
+except:
+    print("unable to use virtual environment")
+    
+
 from flask import Flask, render_template, request, jsonify, url_for, redirect, flash, send_from_directory
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
@@ -403,6 +422,12 @@ def shows_query(query):
 def download(fullpath):  
     fullpath = fullpath.strip().strip('\n')
     print(fullpath)  
+
+    if 'torrent' not in fullpath.lower():
+        print('invalid file path')
+        flash('invalid file path')
+        # return None
+        return redirect(url_for('home'))
 
     if current_user.is_authenticated == False:
         return redirect(url_for('login'))

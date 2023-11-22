@@ -7,6 +7,7 @@ __pycache__/
 /upsert_passwords.py
 
 /static/cache/*
+/junk
 
 # C extensions
 *.so

@@ -7,6 +7,8 @@ if errorlevel 1 (
     cd "C:\Program Files\qBittorrent"
     qbittorrent.exe
 
+    echo [%date% %time%] "reconnected NordVPN, and restarted qBittorrent " >> cac_log.txt
+
 ) else (
     echo "still running"
 )
