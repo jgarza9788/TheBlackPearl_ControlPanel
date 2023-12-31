@@ -165,7 +165,7 @@
       p.y += cos(time);
 
       // x = scale, y = scale, t = time
-      //float scale = 0.2;
+
       float scale = 0.4;
       vec3 xyt  = vec3(p.x * scale ,p.y * scale,time * ( {{speed}} * 100000000.0 ) );
 
@@ -174,7 +174,7 @@
       float d = 0.0;
 
       //float color_amount = 0.15;
-      float color_amount = 0.07;
+      float color_amount = 0.25;
 
       d = 1.0 - abs(f);
       d = pow(d + color_amount,10000.0);
@@ -242,7 +242,8 @@
 
     }
  
-    </script> 
+</script> 
+
 
 <script id="fs-disable" type="x-shader/fragment" class="dot-maxtrix"> 
 
@@ -775,7 +776,7 @@ return 105.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1),
 
   }
 
-  </script>
+</script>
 
 <script>
     /**

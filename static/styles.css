@@ -5,13 +5,18 @@
 	/* transition: all 666ms ease; */
 	/* transition-delay: 0ms; */
 
-	transition-property: all;
-	transition-duration: 666ms;
+	transition-property: all !important;
+	transition-duration: 1000ms !important;
+	/* transition-duration: 333ms !important; */
+	/* transition-timing-function: ease-out !important; */
+
 	/* transition-timing-function: ease-out; */
 
-	transition-timing-function: ease;
-	/* transition-timing-function: ease-in-out; */
+	/* transition-timing-function: ease; */
+	/* transition-timing-function: ease-in-out !important; */
+	/* transition-timing-function: cubic-bezier() !important; */
 	/* transition-timing-function: ease-out; */
+	transition-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
 
 	/* smooth */
 	/* transition-timing-function: cubic-bezier(0.000, 1.015, 1.000, 1.000); */
@@ -21,6 +26,24 @@
 
 	/* snap */
 	/* transition-timing-function: cubic-bezier(0.000, 0.995, 1.000, 0.740); */
+}
+
+.modal,
+.fade,
+.modal-dialog,
+.modal-content{
+	transition-property: all !important;
+	transition-duration: 333ms !important;
+	transition-timing-function: ease-in-out !important;
+}
+
+.modal{
+	background-color: rgba(0, 0, 0, 0.95);
+	/* background-color: rgba(var(--bs-primary-rgb),0.75); */
+}
+
+.modal-body{
+	overflow: scroll !important;
 }
 
 
@@ -71,13 +94,13 @@ body{
 	overflow-x:hidden !important;
 }
 
+/* Your CSS rules for screens with height less than 1000px */
+/* For example: */
 @media (max-height: 999px) {
-	/* Your CSS rules for screens with height less than 1000px */
-	/* For example: */
 	body {
 		height: calc(100vh - 2rem - 6rem);
 	}
-  }
+}
 
 
 .btn-lg{
@@ -88,6 +111,31 @@ body{
 .btn{
 	border-radius: 0.5rem;
 }
+
+
+.btn-transparent{
+	background-color: transparent;
+	color: var(--bs-primary);
+
+}
+
+.btn-transparent:hover,
+.btn-transparent:focus, 
+.btn-transparent:active,
+.btn-transparent:visited
+{
+	/* background-color: transparent !important; */
+	background-color: rgba(var(--bs-primary-rgb),0.0);
+	color: var(--bs-primary) !important;
+	/* border-color: rgba(var(--bs-primary-rgb),0.25) !important; */
+	border-width: 0px !important;
+}
+
+
+/* .btn-black:hover{
+	color: var(--bs-primary);
+	background-color: var(--bs-black);
+} */
 
 /***************************************************/
 
@@ -120,8 +168,8 @@ body{
 	/* backdrop-filter: blur(25px);
 	-webkit-backdrop-filter: blur(25px); */
 
-	/* backdrop-filter: blur(15px); */
-	/* -webkit-backdrop-filter: blur(15px); */
+	/* backdrop-filter: blur(15px); 
+	-webkit-backdrop-filter: blur(15px); */
 
 	/* backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px); */
@@ -182,7 +230,7 @@ body{
 	margin: 1rem;
 	padding: 0rem;
 	display: grid;
-	grid-template-rows: minmax(4rem,1fr) minmax(6rem,0fr);
+	grid-template-rows: minmax(4rem,1fr) minmax(1rem,0fr);
 	grid-template-columns: minmax(0, 1fr);
 
 
@@ -428,6 +476,15 @@ input{
 	justify-content: center;
 }
 
+
+.large-icon-only{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 2rem;
+}
+
+
 .nf-md-timelapse{
 	animation: rotate 1s infinite;
 	animation-timing-function: linear;
@@ -448,6 +505,10 @@ input{
 	height: 100%;
 
 
+}
+
+.h1r{
+	height: 1rem !important;
 }
 
 .h2r{

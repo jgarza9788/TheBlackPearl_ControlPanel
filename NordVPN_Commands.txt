@@ -1,0 +1,16 @@
+PS C:\Program Files\NordVPN> start NordVPN.exe --help
+PS C:\Program Files\NordVPN>
+List of available NordVPN commands:
+
+  -c, --connect       Quick connect to VPN. Use additional arguments to connect
+                      to the wanted server
+                      -i, --server-id will connect to server by ID.
+                      -n, --server-name will connect to server by Name ex
+                      "United States #5"
+                      -g, --group-name will connect to best server in specified
+                      group ex. "United States"
+
+  -d, --disconnect    Disconnect from VPN
+
+  -v, --version       Show app version
+

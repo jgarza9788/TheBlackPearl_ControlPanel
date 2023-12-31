@@ -162,6 +162,8 @@ src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.0/mdb.min.js"
 
         var menu_section = document.getElementById("menu-section");
 
+        var menu_icon = document.getElementById("menu-icon");
+
         if ( main_grid.classList.contains('main-grid-normal') )
         {    
 
@@ -170,7 +172,13 @@ src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.0/mdb.min.js"
 
             menu_section.classList.remove("overflow-y-hidden");
             menu_section.classList.add("overflow-y-scroll");
+
             
+            // menu_icon.classList.remove("nf-md-menu");
+            // menu_icon.classList.add("nf-md-minus");
+
+            menu_icon.classList.remove("nf-md-page_layout_header");
+            menu_icon.classList.add("nf-md-page_layout_footer");
         }
         else
         {
@@ -179,7 +187,13 @@ src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.0/mdb.min.js"
 
             menu_section.classList.remove("overflow-y-scroll");
             menu_section.classList.add("overflow-y-hidden");
-            
+
+            // menu_icon.classList.remove("nf-md-minus");
+            // menu_icon.classList.add("nf-md-menu");
+
+
+            menu_icon.classList.remove("nf-md-page_layout_footer");
+            menu_icon.classList.add("nf-md-page_layout_header");
         }
     }
 
@@ -194,6 +208,10 @@ src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.0/mdb.min.js"
         menu_section.classList.remove("overflow-y-hidden");
         menu_section.classList.add("overflow-y-scroll");
 
+        var menu_icon = document.getElementById("menu-icon");
+        menu_icon.classList.remove("nf-md-menu");
+        menu_icon.classList.add("nf-fa-minus");
+
     }
 
     function hide_menu(){
@@ -206,6 +224,10 @@ src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.0/mdb.min.js"
         var menu_section = document.getElementById("menu-section");
         menu_section.classList.remove("overflow-y-scroll");
         menu_section.classList.add("overflow-y-hidden");
+
+        var menu_icon = document.getElementById("menu-icon");
+        menu_icon.classList.remove("nf-fa-minus");
+        menu_icon.classList.add("nf-md-menu");
     }
 </script>
 
@@ -299,29 +321,22 @@ src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.0/mdb.min.js"
 speed, red, blue, green    
 #}
 
-{#
-{{ bge.bge(0.01,29.0/255.0,155.0/255.0,240.0/255.0) }}
-#}
 
 <!-- twitter blue -->
-<!-- {{ bge.bge(0.01,29.0/255.0,155.0/255.0,240.0/255.0) }} -->
+{{ bge.bge(0.01,29.0/255.0,155.0/255.0,240.0/255.0) }}
 
 <!-- Tiffany Blue -->
-{{ bge.bge(0.01,10.0/255.0,186.0/255.0,181.0/255.0) }}
+<!-- {{ bge.bge(0.01,10.0/255.0,186.0/255.0,181.0/255.0) }} -->
 
 <!-- Spotify Green -->
 <!-- {{ bge.bge(0.01,30.0/255.0,215.0/255.0,96.0/255.0) }} -->
 
 
-{#
-{{ bge.bge(1.0.0,0.03921,0.7294,0.7098) }}
-#}
-
 <!---->
 
 <!-- Modal -->
 <div class="modal fade" id="FileModal" tabindex="-5" aria-labelledby="FileModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog rounded-4 ">
       <div class="modal-content blur-background-filter">
         <!-- <div class="modal-header text-light border-0">
           <h1 class="modal-title fs-3" id="FileModalLabel">Modal title</h1>
@@ -330,8 +345,8 @@ speed, red, blue, green
         </div> -->
         <div class="modal-header text-light border-0 h6r row_tc">
             <h1 class="modal-title fs-3" id="FileModalLabel">Modal title</h1>
-            <a type="button" class="btn btn-danger fs-4 icon-only w-100 h-100" data-bs-dismiss="modal" aria-label="Close" >
-                <i class="nf nf-cod-close"></i>
+            <a type="button" class="btn btn-danger fs-4 icon-only w-100 h-100 text-dark" data-bs-dismiss="modal" aria-label="Close" >
+                <i class="nf nf-md-close_thick"></i>
             </a>
           </div>
         <div class="modal-body text-wrap text-light fs-4">
@@ -347,105 +362,38 @@ speed, red, blue, green
         </div>
       </div>
     </div>
-  </div>
-
-<!--
-<ul class="menu">
-
-    {#
-    {% import 'macro1.j2' as m1 -%}
-    {{ m1.input('justin', value='', type='text') }}
-    #}
-
-    {% if logged_in %}
-    
-    <a class="btn btn-dark row_iti fs-4 blur-background-filter shadow-xlg" href="{{ url_for('logout') }}">     <i class="nf nf-md-logout"></i> Logout </a>
-    <a class="btn btn-dark row_iti fs-4 blur-background-filter shadow-xlg" href="{{ url_for('home') }}">       <i class="nf nf-md-skull"></i> Home </a>
-    <a class="btn btn-dark row_iti fs-4 blur-background-filter shadow-xlg" href="{{ url_for('movies') }}">     <i class="nf nf-md-filmstrip"></i> Movies </a>
-
-    <a class="btn btn-dark row_iti fs-4 blur-background-filter shadow-xlg" href="{{ url_for('shows') }}">     <i class="nf nf-md-television_classic"></i> Shows </a>
-
-    
-    <a class="btn btn-dark row_iti fs-4 blur-background-filter shadow-xlg" href="{{ url_for('Movie_Roulette') }}">     
-        <i class="nf nf-md-dice_multiple"></i> 
-        <span class="fs-6 text-wrap">
-            Movie<br/ >Roulette 
-        </span>
-    </a>
-
-    <a class="btn btn-dark row_iti fs-4 blur-background-filter shadow-xlg" href="https://app.plex.tv/">  
-    <i class="nf nf-md-plex"></i>       
-    Plex 
-    </a>
-        
-   
-
-    {% else %}
-    
-    <a class="btn btn-dark row_iti fs-4 blur-background-filter" href="{{ url_for('login') }}">     <i class="nf nf-md-login"></i> Login </a>
-    <a class="btn btn-dark row_iti fs-4 blur-background-filter disabled " >     <i class="nf nf-md-skull"></i> Home </a>
-    <a class="btn btn-dark row_iti fs-4 blur-background-filter disabled " >     <i class="nf nf-md-filmstrip"></i> Movies </a>
-    <a class="btn btn-dark row_iti fs-4 blur-background-filter disabled " >     <i class="nf nf-md-television_classic"></i> Shows </a>
-    <a class="btn btn-dark row_iti fs-4 blur-background-filter disabled " >     
-        <i class="nf nf-md-dice_multiple"></i> 
-        <span class="fs-6 text-wrap">
-            Movie<br/ >Roulette 
-        </span>
-    </a>
-    <a class="btn btn-dark row_iti fs-4 blur-background-filter disabled " >     
-        <i class="nf nf-md-plex"></i>       
-        Plex 
-    </a>
-    {#
-    <a class="btn btn-dark row_iti fs-4 blur-background-filter disabled " href="{{ url_for('VPN') }}">        <i class="nf nf-md-shield_star"></i> VPN </a>
-    #}
-
-    {% endif %}
-
-</ul>
--->
-
-{#
-<!--
-<div class="bg-darkx blur-background-filter rounded-3 shadow-xlg td666 menu-show" id="content">
-    <div class="base-grid">
-        <div class="row_iti">
-            <a class="btn btn-primary anim-primary w-100 h-100 fs-4 icon-only" id="menu-button" onclick="toggle_menu()">
-                <i id="menu-icon" class="nf "></i>
-            </a>
-
-            <div class="head text-white text-center text-capitalize fs-4 page-title">
-                <i id="icon" class="nf "></i>
-                <div class="space"></div>
-                {{title}}
-            </div>
-        </div>
-
-        {% block content %}
-        {% endblock %}
-
-        {% with messages = get_flashed_messages(category_filter=["error"]) %}
-        {% if messages %}
-            {% for message in messages %}
-                <span class="badge bg-danger shadow-5-strong">{{ message }}</span>
-            {% endfor %}
-        {% endif %}
-        {% endwith %}
-
-    </div>
 </div>
--->
-#}
+
+
+
 
 <div class="main-grid-menu" id="content">
 
 
     <div class="w100h100 blur-background-filter rounded-4 shadow-001 overflow-hidden border border-primary border-1">
-        <div class="w100h100 h4r text-white text-center text-capitalize fs-4 page-title ">
+
+        <a class="mxw500  h4r row_iti link-underline link-underline-opacity-0 text-white text-center text-capitalize fs-4 " id="menu-button" onclick="toggle_menu()">
             <i id="icon" class="nf "></i>
-            <div class="space"></div>
-            {{title}}
-        </div>
+            <div class="page-title">{{title}}</div>
+            <i id="menu-icon" class="nf nf-md-menux nf-md-page_layout_header fs-2 text-primary"></i>
+        </a>
+
+        <!-- <div class="h4r row_iti">
+            <div></div>
+
+            <div class="w100h100 h4r text-white text-center text-capitalize fs-4 page-title ">
+                
+                <div class="space"></div>
+                {{title}}
+            </div>
+
+
+            <a class="btn btn-primary btn-transparentx rounded-4x h-100 icon-only" id="menu-button" onclick="toggle_menu()">     
+                <i id="menu-icon" class="nf nf-md-menu fs-4">
+                </i>
+            </a>
+        </div> -->
+
 
         {% block content %}
         {% endblock %}
@@ -457,16 +405,20 @@ speed, red, blue, green
 
     <div class="w100h100 blur-background-filter rounded-4 shadow-001 overflow-hidden border border-primary border-1">
         <div class="nav-grid mxw500 overflow-y-hidden" id="menu-section">
-        <a class="btn btn-primary row_iti fs-4 shadow-001" id="menu-button" onclick="toggle_menu()">     
-            <i class="nf nf-md-menu icon-only"> </i>
-            <!-- <div class="fill-item">Menu</div> -->
+        <!-- <a class="btn btn-primary row_iti fs-4 shadow-001" id="menu-button" onclick="toggle_menu()">     
+            <i class="nf nf-md-menu icon-only">
+            </i>
             Menu
-        </a>
+        </a> -->
     
 
         {% if logged_in %}
         
-            <a class="btn btn-dark btn-black row_iti fs-4  shadow-001" href="{{ url_for('logout') }}">     <i class="nf nf-md-logout"></i> Logout </a>
+            <a class="btn btn-dark btn-black row_iti fs-4  shadow-001" href="{{ url_for('logout') }}">     
+                <i class="nf nf-md-logout">
+                </i> 
+                Logout 
+            </a>
             <a class="btn btn-dark btn-black row_iti fs-4  shadow-001" href="{{ url_for('home') }}">       <i class="nf nf-md-skull"></i> Home </a>
             <a class="btn btn-dark btn-black row_iti fs-4  shadow-001" href="{{ url_for('movies') }}">     <i class="nf nf-md-filmstrip"></i> Movies </a>
         

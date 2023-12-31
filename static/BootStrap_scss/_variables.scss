@@ -299,16 +299,25 @@ $cyans: (
 
 // scss-docs-start theme-color-variables
 // $primary:       $blue !default;
-// $primary:          #1d9bf0 !default; //twitter blue
-$primary:       #0ABAB5 !default; //tiffany blue
+
+$primary:          #1d9bf0 !default; //twitter blue
+// $primary:       #0ABAB5 !default; //tiffany blue
 // $primary:         #1ed760 !default; //Spotify Green
+
 // $primary:         #7FFF00 !default;
 // $primary:       #2a2a2a !default;
 $secondary:     $gray-600 !default;
-$success:       $green !default;
+
+// $success:       $green !default;
+$success:       $primary !default;
+
 $info:          $cyan !default;
 $warning:       $yellow !default;
+
 $danger:        $red !default;
+// $danger:        #e1289f !default;
+// $danger:        invert($primary) !default;
+
 $light:         $gray-100 !default;
 $dark:          $gray-900 !default;
 // scss-docs-end theme-color-variables

@@ -176,6 +176,15 @@ def home():
     #         )
     # return render_template("index.html", logged_in=current_user.is_authenticated)
 
+
+@app.route('/reconnect')
+def reconnect():
+    p = subprocess.Popen(os.path.join(DIR,'Reconnect.cmd'))
+    p.wait()
+
+    return redirect(url_for('home'))
+
+
 # @app.route('/register', methods=["GET", "POST"])
 # def register():
 #     if request.method == "POST":
