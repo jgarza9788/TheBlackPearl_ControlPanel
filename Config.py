@@ -3,9 +3,9 @@ import json5 as json
 
 
 class Config:
-    def __init__(self):
+    def __init__(self,filename="config.json",):
         self.DIR = os.path.dirname(os.path.realpath(__file__))
-        self.file = os.path.join(self.DIR, 'config.json')
+        self.file = os.path.join(self.DIR, filename)
         self.data = self.get_data(self.file)
 
     def get_data(self,file):
